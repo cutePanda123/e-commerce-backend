@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--import data source properties-->
+    <properties resource="datasource.properties"></properties>
+
+    <!--import jdbc driver-->
+    <classPathEntry location="${db.driverLocation}"/>
+
+    <context id="default" targetRuntime="MyBatis3">
+
+        <!-- optional, control the comments on data class  -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--jdbc db connection-->
+        <jdbcConnection
+                driverClass="${db.driverClassName}"
+                connectionURL="${db.url}"
+                userId="${db.username}"
+                password="${db.password}">
+        </jdbcConnection>
+
+        <!-- optional, data converter between java and db object -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- Model generate config that indicates primary key, target class, and query examples
+            targetPackage     target package name
+            targetProject     path in the project
+        -->
+        <!--<javaModelGenerator targetPackage="com.mmall.pojo" targetProject=".\src\main\java">-->
+        <javaModelGenerator targetPackage="com.mmall.pojo" targetProject="./src/main/java">
+            <!-- if enable sub packages, for example targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- if add constructor to the class -->
+            <property name="constructorBased" value="true"/>
+            <!-- if trim string type column -->
+            <property name="trimStrings" value="true"/>
+            <!-- if the generated module immutable, if immutable, it does not have setter method -->
+            <property name="immutable" value="false"/>
+        </javaModelGenerator>
+
+        <!--mapper sql implematation xml file path -->
+        <!--<sqlMapGenerator targetPackage="mappers" targetProject=".\src\main\resources">-->
+        <sqlMapGenerator targetPackage="mappers" targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- generate client-side code target Model object and XML config file
+                type="ANNOTATEDMAPPER",generate Java Model and Mapper object baesd on annotaton
+                type="MIXEDMAPPER", generate Java Model based on annotation and Mapper object
+                type="XMLMAPPER", generate SQLMap XML file and independent Mapper interface
+        -->
+
+        <!-- targetPackage：mapper interface dao file path -->
+        <!--<javaClientGenerator type="XMLMAPPER" targetPackage="com.mmall.dao" targetProject=".\src\main\java">-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.mmall.dao" targetProject="./src/main/java">
+            <!-- enableSubPackages:if use schema as the package name suffix -->
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <table tableName="mmall_shipping" domainObjectName="Shipping" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_cart" domainObjectName="Cart" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_cart_item" domainObjectName="CartItem" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_category" domainObjectName="Category" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_order" domainObjectName="Order" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_order_item" domainObjectName="OrderItem" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_pay_info" domainObjectName="PayInfo" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="mmall_product" domainObjectName="Product" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <columnOverride column="detail" jdbcType="VARCHAR" />
+            <columnOverride column="sub_images" jdbcType="VARCHAR" />
+        </table>
+        <table tableName="mmall_user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+
+        <!-- geelynote mybatis plugin config -->
+    </context>
+</generatorConfiguration>
