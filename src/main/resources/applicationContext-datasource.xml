@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="com.mmall" annotation-config="true"/>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="2"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:datasource.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driverClassName}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <!-- connection pool initial size -->
+        <property name="initialSize" value="${db.initialSize}"/>
+        <!-- connection pool max active connections number -->
+        <property name="maxActive" value="${db.maxActive}"/>
+        <!-- max idle connection number. after a rush hour, connection pool will clean extra connections until it goes to this size  -->
+        <property name="maxIdle" value="${db.maxIdle}"/>
+        <!-- min idle connection number. connection will keep this number to prepare for coming requests -->
+        <property name="minIdle" value="${db.minIdle}"/>
+        <!-- max connection wait time. Exceeding this number will lead to exception. -1 means unlimited -->
+        <property name="maxWait" value="${db.maxWait}"/>
+        <!-- use a simple SQL query to verify data source -->
+        <!--<property name="validationQuery" value="select getdate()" />-->
+        <property name="defaultAutoCommit" value="${db.defaultAutoCommit}"/>
+        <!-- recollect abandoned connections to connection pool. the abandoned ones are usually caused by missing releasing after usage -->
+        <!--<property name="removeAbandoned" value="true" />-->
+        <!-- max idle time for a connection. Exceeding this time will be treated as an abandoned connection -->
+        <!--<property name="removeAbandonedTimeout" value="120" />-->
+        <!-- max timeout for a idle connections -->
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}"/>
+
+        <!-- time interval between the two executions of eviction program. it should be smaller than MySQL's default number. -->
+        <property name="timeBetweenEvictionRunsMillis" value="40000"/>
+        <!-- test if an idle connections is still valid -->
+        <property name="testWhileIdle" value="true"/>
+        <!-- a simple query to test the connectivity -->
+        <property name="validationQuery" value="SELECT 1 FROM dual"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
+
+        <!-- plugins for database pagination -->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <value>
+                            dialect=mysql
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+
+    </bean>
+
+    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.mmall.dao"/>
+    </bean>
+
+    <!-- use @Transactional to enable database transaction -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+    <!-- ioc for transaction manger bean -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="rollbackOnCommitFailure" value="true"/>
+    </bean>
+
+</beans>
