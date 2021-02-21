@@ -26,11 +26,11 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>tomcat-servlet-api</artifactId>
-      <version>7.0.64</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.apache.tomcat</groupId>-->
+<!--      <artifactId>tomcat-servlet-api</artifactId>-->
+<!--      <version>7.0.64</version>-->
+<!--    </dependency>-->
 
     <dependency>
       <groupId>org.springframework</groupId>
@@ -311,6 +311,11 @@
           <groupId>org.apache.tomcat.maven</groupId>
           <artifactId>tomcat7-maven-plugin</artifactId>
           <version>2.2</version>
+<!--          <configuration>-->
+<!--            <path>/</path>-->
+<!--            <port>8080</port>-->
+<!--            <uriEncoding>UTF-8</uriEncoding>-->
+<!--          </configuration>-->
         </plugin>
 <!--        <plugin>-->
 <!--          <groupId>org.apache.maven.plugins</groupId>-->
