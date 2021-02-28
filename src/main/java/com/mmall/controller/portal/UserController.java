@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,5 +26,46 @@ public class UserController {
             session.setAttribute(Constants.CURRENT_USER, response.getData());
         }
         return response;
+    }
+
+    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> logout(HttpSession session) {
+        session.removeAttribute(Constants.CURRENT_USER);
+        return ServerResponse.createBySuccess();
+    }
+
+    @RequestMapping(value = "register.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> register(User user) {
+        return iUserService.register(user)
+    }
+
+    @RequestMapping(value = "is_unregistered.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> isUnregistered(String userIdentity, String identityType) {
+        return iUserService.isUnregisteredUserIdentity(userIdentity, identityType);
+    }
+
+    @RequestMapping(value = "get_user_info.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<User> getUserInfo(HttpSession session) {
+        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (user != null) {
+            return ServerResponse.createBySuccess(user);
+        }
+        return ServerResponse.createByErrorMessage("user has not login");
+    }
+
+    @RequestMapping(value = "get_security_question.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> getSecurityQuestion(String username) {
+        return iUserService.getSecurityQuestion(username);
+    }
+
+    @RequestMapping(value = "check_security_answer.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> checkSecurityAnswer(String username, String question, String answer) {
+        return iUserService.checkSecurityQuestionAnswer(username, question, answer);
     }
 }

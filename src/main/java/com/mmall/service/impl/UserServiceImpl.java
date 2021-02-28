@@ -1,12 +1,17 @@
 package com.mmall.service.impl;
 
+import com.mmall.common.Constants;
 import com.mmall.common.ServerResponse;
+import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
@@ -20,13 +25,71 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("user does not exist");
         }
 
-        // todo: encrypt password with md5
+        String md5Password = MD5Util.MD5EncodeUtf8(password)
 
-        User user = userMapper.selectLogin(username, password);
+        User user = userMapper.selectLogin(username, md5Password);
         if (user == null) {
             return ServerResponse.createByErrorMessage("invalid password");
         }
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess("login success", user);
+    }
+
+    public ServerResponse<String> register(User user) {
+        ServerResponse usernameChecking = isUnregisteredUserIdentity(user.getUsername(), Constants.USERNAME);
+        if (!usernameChecking.isSuccess()) {
+            return usernameChecking;
+        }
+        ServerResponse emailChecking = isUnregisteredUserIdentity(user.getEmail(), Constants.EMAIL);
+        if (!emailChecking.isSuccess()) {
+            return emailChecking;
+        }
+
+        user.setRole(Constants.Role.ROLE_CUSTOMER);
+        user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
+        int insertionCount = userMapper.insert(user);
+        if (insertionCount == 0) {
+            return ServerResponse.createByErrorMessage("register failed");
+        }
+        return ServerResponse.createBySuccessMessage("register success");
+    }
+
+    public ServerResponse<String> isUnregisteredUserIdentity(String userIdentity, String userIdentityType) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(userIdentityType)) {
+            return ServerResponse.createByErrorMessage("invalid params");
+        }
+        if (Constants.USERNAME.equals(userIdentityType)) {
+            if (userMapper.checkUsername(userIdentity) > 0) {
+                return ServerResponse.createByErrorMessage("username exists");
+            }
+        }
+        if (Constants.EMAIL.equals(userIdentityType)) {
+            if (userMapper.checkEmail(userIdentity) > 0) {
+                return ServerResponse.createByErrorMessage("email exists");
+            }
+        }
+        return ServerResponse.createBySuccessMessage("available user identity");
+    }
+
+    public ServerResponse getSecurityQuestion(String username) {
+        ServerResponse response = isUnregisteredUserIdentity(username, Constants.USERNAME);
+        if (response.isSuccess()) {
+            return ServerResponse.createByErrorMessage("user does not exist");
+        }
+        String question = userMapper.selectQuestionByUsername(username);
+        if (org.apache.commons.lang3.StringUtils.isBlank(question)) {
+            return ServerResponse.createByErrorMessage("invalid security question");
+        }
+        return ServerResponse.createBySuccess(question);
+    }
+
+    public ServerResponse checkSecurityQuestionAnswer(String username, String question, String answer) {
+        int resoutCount = userMapper.checkAnswer(username, question, answer);
+        if (resoutCount == 0) {
+            return ServerResponse.createByErrorMessage("answer is wrong");
+        }
+        String token = UUID.randomUUID().toString();
+        TokenCache.setKey(Constants.CACHE_TOKEN_PREFIX + username, token);
+        return ServerResponse.createBySuccess(token);
     }
 }
