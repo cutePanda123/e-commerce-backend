@@ -68,4 +68,10 @@ public class UserController {
     public ServerResponse<String> checkSecurityAnswer(String username, String question, String answer) {
         return iUserService.checkSecurityQuestionAnswer(username, question, answer);
     }
+
+    @RequestMapping(value = "reset_froget_password.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> resetForgetPassword(String username, String newPassword, String token) {
+        return iUserService.resetPasswordWithToken(username, newPassword, token);
+    }
 }

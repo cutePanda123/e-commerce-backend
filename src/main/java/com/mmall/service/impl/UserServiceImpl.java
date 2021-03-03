@@ -92,4 +92,27 @@ public class UserServiceImpl implements IUserService {
         TokenCache.setKey(Constants.CACHE_TOKEN_PREFIX + username, token);
         return ServerResponse.createBySuccess(token);
     }
+
+    public ServerResponse<String> resetPasswordWithToken(String username, String newPassword, String token) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMessage("token is blank");
+        }
+        ServerResponse response = isUnregisteredUserIdentity(username, Constants.USERNAME);
+        if (response.isSuccess()) {
+            return ServerResponse.createByErrorMessage("user does not exist");
+        }
+        String savedToken = TokenCache.getKey(Constants.CACHE_TOKEN_PREFIX + username);
+        if (org.apache.commons.lang3.StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorMessage("input token is blank");
+        }
+        if (!org.apache.commons.lang3.StringUtils.equals(savedToken, token)) {
+            return ServerResponse.createByErrorMessage("input token is wrong");
+        }
+        String encryptedPassword = MD5Util.MD5EncodeUtf8(newPassword);
+        int rowCount = userMapper.updatePasswordByUsername(username, newPassword);
+        if (rowCount == 0) {
+            return ServerResponse.createByErrorMessage("reset password failed");
+        }
+        return ServerResponse.createBySuccessMessage("reset password success");
+    }
 }

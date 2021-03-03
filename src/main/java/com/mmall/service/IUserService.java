@@ -13,4 +13,6 @@ public interface IUserService {
     public ServerResponse getSecurityQuestion(String username);
 
     public ServerResponse checkSecurityQuestionAnswer(String username, String question, String answer);
+
+    public ServerResponse<String> resetPasswordWithToken(String username, String newPassword, String token);
 }
