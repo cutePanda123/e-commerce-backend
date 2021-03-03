@@ -74,4 +74,14 @@ public class UserController {
     public ServerResponse<String> resetForgetPassword(String username, String newPassword, String token) {
         return iUserService.resetPasswordWithToken(username, newPassword, token);
     }
+
+    @RequestMapping(value = "reset_password.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> resetPassword(HttpSession session, String oldPassword, String newPassword) {
+        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("user has not login");
+        }
+        return iUserService.resetPassword(oldPassword, newPassword, user);
+    }
 }
