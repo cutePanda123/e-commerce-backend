@@ -1,6 +1,7 @@
 package com.mmall.controller.portal;
 
 import com.mmall.common.Constants;
+import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
@@ -83,5 +84,32 @@ public class UserController {
             return ServerResponse.createByErrorMessage("user has not login");
         }
         return iUserService.resetPassword(oldPassword, newPassword, user);
+    }
+
+    @RequestMapping(value = "update_user_information.do", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<User> updateInformation(HttpSession session, User user) {
+        User savedUser = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (savedUser == null) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        user.setId((savedUser.getId()));
+        user.setUsername(savedUser.getUsername());
+        ServerResponse<User> response = iUserService.updateUserInformation(user);
+        if (response.isSuccess()) {
+            response.getData().setUsername(savedUser.getUsername());
+            session.setAttribute(Constants.CURRENT_USER, response.getData());
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "get_user_information.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<User> getInformation(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user did not login");
+        }
+        return iUserService.getUserInformation(currentUser.getId());
     }
 }

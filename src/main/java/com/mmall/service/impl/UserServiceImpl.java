@@ -117,7 +117,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     public ServerResponse<String> resetPassword(String oldPassword, String newPassword, User user) {
-        int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(oldPassword), user.getId());
+        int resultCount = userMapper.checkPasswordByUserId(MD5Util.MD5EncodeUtf8(oldPassword), user.getId());
         if (resultCount == 0) {
             return ServerResponse.createByErrorMessage("wrong old password");
         }
@@ -127,5 +127,33 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("reset password failed");
         }
         return ServerResponse.createBySuccessMessage("reset password success");
+    }
+
+    public ServerResponse<User> updateUserInformation(User user) {
+        int resultCount = userMapper.checkEmailByUserId(user.getEmail(), user.getId());
+        if (resultCount > 0) {
+            return ServerResponse.createByErrorMessage("cannot use existing email");
+        }
+        User updatedUser = new User();
+        updatedUser.setId(user.getId());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setPhone(user.getPhone());
+        updatedUser.setSecurityQuestion(user.getSecurityQuestion());
+        updatedUser.setSecurityAnswer(user.getSecurityAnswer());
+
+        int updateCount = userMapper.updateByPrimaryKeySelective(updatedUser);
+        if (updateCount > 0) {
+            return ServerResponse.createBySuccess("user information update success", updatedUser);
+        }
+        return ServerResponse.createByErrorMessage("user information update failed");
+    }
+
+    public ServerResponse<User> getUserInformation(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null) {
+            return  ServerResponse.createByErrorMessage("cannot find this user");
+        }
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
     }
 }
