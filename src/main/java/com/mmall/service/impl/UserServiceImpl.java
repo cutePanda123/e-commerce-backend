@@ -25,7 +25,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("user does not exist");
         }
 
-        String md5Password = MD5Util.MD5EncodeUtf8(password)
+        String md5Password = MD5Util.MD5EncodeUtf8(password);
 
         User user = userMapper.selectLogin(username, md5Password);
         if (user == null) {

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.security.MessageDigest;
 
 public class MD5Util {
-    private Logger logger = LoggerFactory.getLogger(MD5Util.class);
+    static private Logger logger = LoggerFactory.getLogger(MD5Util.class);
     private static String byteArrayToHexString(byte b[]) {
         StringBuffer resultSb = new StringBuffer();
         for (int i = 0; i < b.length; i++) {

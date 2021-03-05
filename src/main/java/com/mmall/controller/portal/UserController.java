@@ -21,12 +21,19 @@ public class UserController {
     private IUserService iUserService;
 
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
+    @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
             session.setAttribute(Constants.CURRENT_USER, response.getData());
         }
         return response;
+    }
+
+    @RequestMapping(value = "healthcheck.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> healthcheck() {
+        return ServerResponse.createBySuccess("service is healthy");
     }
 
     @RequestMapping(value = "logout.do", method = RequestMethod.GET)
@@ -39,7 +46,7 @@ public class UserController {
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> register(User user) {
-        return iUserService.register(user)
+        return iUserService.register(user);
     }
 
     @RequestMapping(value = "is_unregistered.do", method = RequestMethod.GET)
@@ -108,7 +115,9 @@ public class UserController {
     public ServerResponse<User> getInformation(HttpSession session) {
         User currentUser = (User) session.getAttribute(Constants.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user did not login");
+            return ServerResponse.createByErrorCodeMessage(
+                    ResponseCode.NEED_LOGIN.getCode(),
+                    "user did not login, force user to login with response code 10");
         }
         return iUserService.getUserInformation(currentUser.getId());
     }

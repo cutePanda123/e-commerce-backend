@@ -18,26 +18,27 @@ public class PropertiesUtil {
         String fileName = "mmall.properties";
         props = new Properties();
         try {
-            props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName),"UTF-8"));
+            props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(fileName), "UTF-8"));
         } catch (IOException e) {
-            logger.error("config file issue",e);
+            logger.error("config file issue", e);
         }
     }
 
-    public static String getProperty(String key){
+    public static String getProperty(String key) {
         String value = props.getProperty(key.trim());
-        if(StringUtils.isBlank(value)){
+        if (StringUtils.isBlank(value)) {
             return null;
         }
         return value.trim();
     }
 
-    public static String getProperty(String key,String defaultValue){
+    public static String getProperty(String key, String defaultValue) {
 
         String value = props.getProperty(key.trim());
-        if(StringUtils.isBlank(value)){
+        if (StringUtils.isBlank(value)) {
             value = defaultValue;
         }
         return value.trim();
     }
+}
 

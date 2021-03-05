@@ -48,7 +48,7 @@
         <appender-ref ref="console"/>
     </logger>
 
-    <!-- geelynote mybatis log -->
+    <!-- mybatis log -->
 
     <logger name="com.mmall.dao" level="DEBUG"/>
 
