@@ -62,4 +62,42 @@ public class CategoryManageController {
         return iCategoryService.updateCategoryName(categoryName, categoryId);
     }
 
+    @RequestMapping(value = "get_subcategory.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse getSubCategoryWithoutRecursion(
+            HttpSession session,
+            @RequestParam(value = "categoryId", defaultValue = 0) Integer categoryId
+    ) {
+        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(
+                    ResponseCode.NEED_LOGIN.getCode(),
+                    "user does not login"
+            );
+        }
+        if (!iUserService.isAdminRole(user).isSuccess()) {
+            return ServerResponse.createByErrorMessage("admin user only: permission denied");
+        }
+        return iCategoryService.getSubCategoryWithoutRecursion(categoryId);
+    }
+
+    @RequestMapping(value = "get_subcategory_recursion.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse getSubCategoryWithRecursion(
+            HttpSession session,
+            @RequestParam(value = "categoryId", defaultValue = 0) Integer categoryId
+    ) {
+        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(
+                    ResponseCode.NEED_LOGIN.getCode(),
+                    "user does not login"
+            );
+        }
+        if (!iUserService.isAdminRole(user).isSuccess()) {
+            return ServerResponse.createByErrorMessage("admin user only: permission denied");
+        }
+        return iCategoryService.getSubCategoryWithRecursion(categoryId);
+    }
+
 }
