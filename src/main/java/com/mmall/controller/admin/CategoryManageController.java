@@ -29,7 +29,7 @@ public class CategoryManageController {
     public ServerResponse addCategory(
             HttpSession session,
             String categoryName,
-            @RequestParam(value = "parentId", defaultValue = 0)Integer parentId) {
+            @RequestParam(value = "parentId", defaultValue = "0")Integer parentId) {
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
@@ -66,7 +66,7 @@ public class CategoryManageController {
     @ResponseBody
     public ServerResponse getSubCategoryWithoutRecursion(
             HttpSession session,
-            @RequestParam(value = "categoryId", defaultValue = 0) Integer categoryId
+            @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId
     ) {
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
         if (user == null) {
@@ -85,7 +85,7 @@ public class CategoryManageController {
     @ResponseBody
     public ServerResponse getSubCategoryWithRecursion(
             HttpSession session,
-            @RequestParam(value = "categoryId", defaultValue = 0) Integer categoryId
+            @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId
     ) {
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
         if (user == null) {

@@ -12,5 +12,5 @@ public interface ICategoryService {
 
     public ServerResponse<List<Category>> getSubCategoryWithoutRecursion(Integer id);
 
-    public ServerResponse<List<Category>> getSubCategoryWithRecursion(Integer id);
+    public ServerResponse<List<Integer>> getSubCategoryWithRecursion(Integer id);
 }

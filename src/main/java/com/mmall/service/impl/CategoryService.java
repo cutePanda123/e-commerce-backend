@@ -63,7 +63,7 @@ public class CategoryService implements ICategoryService {
         return ServerResponse.createBySuccess(categories);
     }
 
-    public ServerResponse<List<Category>> getSubCategoryWithRecursion(Integer id) {
+    public ServerResponse<List<Integer>> getSubCategoryWithRecursion(Integer id) {
         Set<Category> categories = Sets.newHashSet();
         findSubCategory(id, categories);
 
