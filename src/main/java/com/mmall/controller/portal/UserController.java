@@ -29,13 +29,7 @@ public class UserController {
         }
         return response;
     }
-
-    @RequestMapping(value = "healthcheck.do", method = RequestMethod.GET)
-    @ResponseBody
-    public ServerResponse<String> healthcheck() {
-        return ServerResponse.createBySuccess("service is healthy");
-    }
-
+    
     @RequestMapping(value = "logout.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> logout(HttpSession session) {
