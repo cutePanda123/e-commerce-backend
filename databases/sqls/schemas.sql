@@ -29,7 +29,7 @@ CREATE TABLE `mmall_category` (
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'created time',
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'last updated time',
     PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARACTER SET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100032 DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE `mmall_product` (
     `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'product id',
@@ -105,7 +105,7 @@ CREATE TABLE `mmall_order_detail` (
     PRIMARY KEY (id),
     UNIQUE KEY `order_no_index` (`order_no`) USING HASH,
     UNIQUE KEY `order_no_user_id_index` (`order_no`, `user_id`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARACTER SET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE `mmall_shipping_address` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -125,3 +125,5 @@ CREATE TABLE `mmall_shipping_address` (
 ALTER TABLE mmall_cart DROP FOREIGN KEY mmall_cart_ibfk_1;
 ALTER TABLE mmall_cart DROP FOREIGN KEY mmall_cart_ibfk_2;
 ALTER TABLE mmall_payment CHANGE order_id order_no int(11);
+
+ALTER TABLE mmall_category AUTO_INCREMENT = 10032;
