@@ -1,5 +1,8 @@
 package com.mmall.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
@@ -10,9 +13,12 @@ import com.mmall.service.IProductService;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.ProductDetailVo;
+import com.mmall.vo.ProductListItemVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductService implements IProductService {
@@ -95,5 +101,31 @@ public class ProductService implements IProductService {
         productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
         productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
         return productDetailVo;
+    }
+
+    public ServerResponse<PageInfo> listProducts(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Product> productList = productMapper.selectList();
+        List<ProductListItemVo> productListItemVos = Lists.newArrayList();
+        for (Product product : productList) {
+            ProductListItemVo productListItemVo = assembleProductListItemVo(product);
+            productListItemVos.add(productListItemVo);
+        }
+        PageInfo pageInfo = new PageInfo(productListItemVos);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    private ProductListItemVo assembleProductListItemVo(Product product) {
+        ProductListItemVo productListItemVo = new ProductListItemVo();
+        productListItemVo.setId(product.getId());
+        productListItemVo.setSubtitle(product.getSubtitle());
+        productListItemVo.setPrice(product.getPrice());
+        productListItemVo.setMainImageUrl(product.getMainImageUrl());
+        productListItemVo.setCategoryId(product.getCategoryId());
+        productListItemVo.setStatus(product.getStatus());
+
+        // imageHost: get from config file or config server
+        productListItemVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://img.mmall.com/"));
+        return productListItemVo;
     }
 }
