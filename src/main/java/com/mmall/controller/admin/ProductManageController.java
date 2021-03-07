@@ -82,4 +82,22 @@ public class ProductManageController {
         return iProductService.listProducts(pageNum, pageSize);
     }
 
+    @RequestMapping(value = "search.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse searchProducts(
+            HttpSession session,
+            Integer productId,
+            String productName,
+            @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
+        }
+        if (!iUserService.isAdminRole(user).isSuccess()) {
+            return ServerResponse.createByErrorMessage("admin only: permission denied.");
+        }
+        return iProductService.searchProducts(productName, productId, pageNum, pageSize);
+    }
+
 }
