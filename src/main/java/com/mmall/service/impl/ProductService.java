@@ -94,7 +94,9 @@ public class ProductService implements IProductService {
         productDetailVo.setStock(product.getStock());
 
         // imageHost: get from config file or config server
-        productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://img.mmall.com/"));
+        productDetailVo.setImageHost(PropertiesUtil.getProperty(
+                "ftp.server.http.prefix",
+                "http://img.mmall.com/"));
         Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
         productDetailVo.setParentCategoryId(category == null ? 0 : category.getParentId());  // default is root category
 
@@ -118,7 +120,8 @@ public class ProductService implements IProductService {
     public ServerResponse<PageInfo> searchProducts(String productName, Integer productId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         if (StringUtils.isNoneBlank(productName)) {
-            productName = new StringBuffer().append("%").append(pageName).append("%").toString();
+            // wildcard matching: % represents zero or more characters
+            productName = new StringBuffer().append("%").append(pageNum).append("%").toString();
         }
         List<Product> productList = productMapper.selectByProductNameAndProductId(productName, productId);
         List<ProductListItemVo> productListItemVos = Lists.newArrayList();
