@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class FtpUtil {
@@ -22,12 +23,15 @@ public class FtpUtil {
         this.port = port;
     }
 
-    public static boolean uploadFiles(List<File> files) {
+    public static boolean uploadFiles(List<File> files) throws IOException {
         FtpUtil ftpUtil = new FtpUtil(ftpIp, 21, ftpUsername, ftpPassword);
-
+        logger.info("connecting to ftp server");
+        boolean result = ftpUtil.uploadFiles("img-folder", files);
+        logger.info("finished uploading with result {}", result);
+        return result;
     }
 
-    private boolean uploadFiles(String ftpServerRemotePath, List<File> files) {
+    private boolean uploadFiles(String ftpServerRemotePath, List<File> files) throws IOException {
         boolean uploaded = true;
         FileInputStream fis = null;
 
@@ -43,10 +47,15 @@ public class FtpUtil {
                     ftpClient.storeFile(file.getName(), fis);
                 }
             } catch (Exception e) {
+                uploaded = false;
                 logger.error("file upload ftp server exception", e);
                 e.printStackTrace();;
+            } finally {
+                fis.close();
+                ftpClient.disconnect();
             }
         }
+        return uploaded;
     }
 
     private boolean connectToFtpServer(String ip, int port, String username, String password) {

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("iProductService")
 public class ProductService implements IProductService {
     @Autowired
     ProductMapper productMapper;
@@ -60,7 +60,7 @@ public class ProductService implements IProductService {
                     ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
         Product product = new Product();
-        product.setStatus(status);
+        product.setStatus(status.byteValue());
         product.setId(productId);
         int rowCount = productMapper.updateByPrimaryKeySelective(product);
         if (rowCount > 0) {
@@ -81,7 +81,7 @@ public class ProductService implements IProductService {
         return ServerResponse.createBySuccess(productDetailVo);
     }
 
-    private ProductDetailVo<> assembleProductDetailVo(Product product) {
+    private ProductDetailVo assembleProductDetailVo(Product product) {
         ProductDetailVo productDetailVo = new ProductDetailVo();
         productDetailVo.setId(product.getId());
         productDetailVo.setSubtitle(product.getSubtitle());

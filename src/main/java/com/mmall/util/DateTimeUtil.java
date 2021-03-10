@@ -25,7 +25,7 @@ public class DateTimeUtil {
         return dateTime.toString(formatStr);
     }
 
-    public static Date strToDate(String dateStr {
+    public static Date strToDate(String dateStr) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(STANDARD_FORMAT);
         DateTime dateTime = dateTimeFormatter.parseDateTime(dateStr);
         return dateTime.toDate();

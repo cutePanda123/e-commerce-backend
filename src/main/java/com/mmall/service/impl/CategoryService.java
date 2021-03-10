@@ -16,7 +16,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Set;
 
-@Service
+@Service("iCategoryService")
 public class CategoryService implements ICategoryService {
     private Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
