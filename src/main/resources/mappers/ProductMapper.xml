@@ -179,14 +179,14 @@
 
   <select id="selectList" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_LIst" />
+    <include refid="Base_Column_List" />
     from mmall_product
     order by id asc
   </select>
 
-  <select id="selectList" resultMap="BaseResultMap" parameterType="map">
+  <select id="selectByProductNameAndProductId" resultMap="BaseResultMap" parameterType="map">
     select
-    <include refid="Base_Column_LIst" />
+    <include refid="Base_Column_List" />
     from mmall_product
     <where>
       <if test="productName != null">
@@ -196,5 +196,21 @@
         and id = #{productId}
       </if>
     </where>
+  </select>
+
+  <select id="selectByProductNameAndCategoryIds" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"></include>
+    from mmall_product
+    where status = 1
+    <if test="productName != null">
+      and name like #{productName}
+    </if>
+    <if test="categoryIds != null">
+      and category_id in
+      <foreach collection="categoryIds" item="categoryId" index="index" open="(" close=")" separator=",">
+        #{categoryId}
+      </foreach>
+    </if>
   </select>
 </mapper>
