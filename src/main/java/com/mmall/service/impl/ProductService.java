@@ -74,7 +74,7 @@ public class ProductService implements IProductService {
         return ServerResponse.createByErrorMessage("update product sale status failed");
     }
 
-    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId, boolean displayAll) {
         if (productId == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), "invalid product id");
         }
@@ -82,7 +82,7 @@ public class ProductService implements IProductService {
         if (product == null) {
             return ServerResponse.createByErrorMessage("product does not exist");
         }
-        if (product.getStatus() != Constants.ProductStatusEnum.ON_SALE.getCode()) {
+        if (!displayAll && product.getStatus() != Constants.ProductStatusEnum.ON_SALE.getCode()) {
             return ServerResponse.createByErrorMessage("product does not exist");
         }
         ProductDetailVo productDetailVo = assembleProductDetailVo(product);

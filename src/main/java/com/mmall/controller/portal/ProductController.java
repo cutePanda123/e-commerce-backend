@@ -20,7 +20,7 @@ public class ProductController {
     @RequestMapping(value = "detail.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<ProductDetailVo> detail(Integer productId) {
-        return iProductService.getProductDetail(productId);
+        return iProductService.getProductDetail(productId, false);
     }
 
     @RequestMapping(value = "list.do", method = RequestMethod.GET)

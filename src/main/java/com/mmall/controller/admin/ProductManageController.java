@@ -65,7 +65,7 @@ public class ProductManageController {
         return iProductService.updateSaleStatus(productId, status);
     }
 
-    @RequestMapping(value = "get_product_detail.do", method = RequestMethod.GET)
+    @RequestMapping(value = "detail.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse manageProductDetail(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
@@ -75,7 +75,7 @@ public class ProductManageController {
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
         }
-        return iProductService.getProductDetail(productId);
+        return iProductService.getProductDetail(productId, true);
     }
 
     @RequestMapping(value = "list.do", method = RequestMethod.GET)

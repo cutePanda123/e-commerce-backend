@@ -10,7 +10,7 @@ public interface IProductService {
 
     public ServerResponse updateSaleStatus(Integer productId, Integer status);
 
-    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId);
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId, boolean displayAll);
 
     public ServerResponse<PageInfo> listProducts(int pageNum, int pageSize);
 
