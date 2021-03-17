@@ -19,6 +19,11 @@ public class Constants {
         int ROLE_ADMIN = 1;
     }
 
+    public interface CartItemStatus {
+        Integer SELECTED = 1;
+        Integer UN_SELECTED = 0;
+    }
+
     public interface ProductListOrderBy {
         Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_desc", "price_asc");
     }
