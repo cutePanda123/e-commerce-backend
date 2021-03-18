@@ -14,7 +14,7 @@ public class CartProductVo {
     private String productSubtitle;
     private String productMainImage;
     private BigDecimal productPrice;
-    private Integer productStatus;
+    private Byte productStatus;
     private Byte productChecked;
     private BigDecimal productTotalPrice;
     private Integer productStock;
