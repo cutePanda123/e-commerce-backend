@@ -20,9 +20,19 @@ public class CartController {
     @Autowired
     private ICartService iCartService;
 
+    @RequestMapping(value = "list.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<CartVo> listCartItems(HttpSession session) {
+        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.listCartItems(user.getId());
+    }
+
     @RequestMapping(value = "add.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> add(HttpSession session, Integer count, Integer productId) {
+    public ServerResponse<CartVo> addCartItems(HttpSession session, Integer count, Integer productId) {
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
