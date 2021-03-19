@@ -45,11 +45,10 @@ public class CartServiceImpl implements ICartService {
             cart.setQuantity(count + cart.getQuantity());
             cartMapper.updateByPrimaryKeySelective(cart);
         }
-        CartVo cartVo = getCartVo(userId);
-        return ServerResponse.createBySuccess(cartVo);
+        return listCartItems(userId);
     }
 
-    public ServerResponse<CartVo> update(Integer userId, Integer productId, Integer count) {
+    public ServerResponse<CartVo> updateCartItemQuantity(Integer userId, Integer productId, Integer count) {
         if (productId == null || count == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -59,8 +58,7 @@ public class CartServiceImpl implements ICartService {
         }
         cart.setQuantity(count);
         cartMapper.updateByPrimaryKeySelective(cart);
-        CartVo cartVo = getCartVo(userId);
-        return ServerResponse.createBySuccess(cartVo);
+        return listCartItems(userId);
     }
 
     public ServerResponse<CartVo> deleteProducts(Integer userId, String productIds) {
@@ -70,8 +68,24 @@ public class CartServiceImpl implements ICartService {
         }
 
         cartMapper.deleteByUserIdAndProductIds(userId, productIdList);
-        CartVo cartVo = getCartVo(userId);
+        return listCartItems(userId);
+    }
+
+    public ServerResponse<CartVo> listCartItems(Integer userId) {
+        CartVo cartVo = this.getCartVo(userId);
         return ServerResponse.createBySuccess(cartVo);
+    }
+
+    public ServerResponse<CartVo> selectOrUnselectCartItem(Integer userId, Integer productId, Integer isSelected) {
+        cartMapper.selectOrUnselectCartItems(userId, null, isSelected);
+        return listCartItems(userId);
+    }
+
+    public ServerResponse<Integer> getCartItemsTotalQuantity(Integer userId) {
+        if (userId == null) {
+            return ServerResponse.createBySuccess(0);
+        }
+        return ServerResponse.createBySuccess(cartMapper.selectCartItemTotalQuantity(userId));
     }
 
     private CartVo getCartVo(Integer userId) {
