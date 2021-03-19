@@ -90,7 +90,7 @@ public class CartController {
         return iCartService.deleteProducts(user.getId(), productIds);
     }
 
-    @RequestMapping(value = "get_cart_items_quantity.do", method = RequestMethod.POST)
+    @RequestMapping(value = "get_cart_items_quantity.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<Integer> getCartItemsTotalQuantity(HttpSession session) {
         User user = (User) session.getAttribute(Constants.CURRENT_USER);
