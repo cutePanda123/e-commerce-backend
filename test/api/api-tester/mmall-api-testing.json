@@ -4,14 +4,405 @@
     {
       "entity": {
         "type": "Project",
-        "id": "3ccd8c40-a9b7-4174-80aa-33968a407442",
+        "id": "b548a1d5-538a-4abb-a1fa-e0d143c5bfc7",
         "name": "mmall"
       },
       "children": [
         {
           "entity": {
             "type": "Service",
-            "id": "a3352395-5fe6-48d5-8fc3-bfc5db3ed287",
+            "id": "241b023c-981a-4b61-94a4-db2763df64ca",
+            "name": "cart"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "productId",
+                        "value": "1"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "count",
+                        "value": "20"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/add.do"
+                },
+                "id": "4721b2f6-cd33-4936-9ab8-8f61f53927f3",
+                "name": "add item to cart",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+                  "name": "DELETE"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "productIds",
+                        "value": "1,2"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/delete.do"
+                },
+                "id": "d8c6d8d5-3330-49ba-9fb0-a3c2ff811286",
+                "name": "delete one",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "",
+                    "value": "1,2"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/get_cart_items_quantity.do"
+                },
+                "id": "0e9fc6a5-e255-493c-86c0-e5d1a303d29f",
+                "name": "get total items quantity",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/list.do"
+                },
+                "id": "8a8fdcf6-79e4-433c-81a1-3d954cc857cf",
+                "name": "list cart items",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/select_all.do"
+                },
+                "id": "95c1efd4-e282-4964-ab8a-b2da06530f17",
+                "name": "select all",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "productId",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/select.do"
+                },
+                "id": "4e668d68-e022-4d76-afe6-2395aa4cff33",
+                "name": "select one",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/unselect_all.do"
+                },
+                "id": "166b0dd9-30f8-47a5-9844-d1d5973264c2",
+                "name": "unselect all",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/json"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "productId",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/unselect.do"
+                },
+                "id": "73677500-f0d4-45b1-a1da-08c0b54769f2",
+                "name": "unselect one",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "productId",
+                        "value": "2"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "count",
+                        "value": "99"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/cart/update.do"
+                },
+                "id": "a43f1a7c-48ab-4537-99c3-8c3620bed9f3",
+                "name": "update one",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "entity": {
+            "type": "Service",
+            "id": "fcfab2e6-a0e7-4cc0-9a0c-47f335332bef",
             "name": "category"
           },
           "children": [
@@ -56,7 +447,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/add_category.do"
                 },
-                "id": "ea6a1042-b3be-4c08-8407-a1eb9cb2a589",
+                "id": "ece9cc35-7b2d-4f94-8157-4d39dcac78a0",
                 "name": "add category",
                 "headers": [
                   {
@@ -100,7 +491,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/get_subcategory.do"
                 },
-                "id": "b2f9ac64-70e6-431f-a510-4f55958c7630",
+                "id": "e9458b44-f4f5-49c3-8f5c-cab357e4dc56",
                 "name": "get category",
                 "headers": []
               }
@@ -138,7 +529,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/get_subcategory_recursion.do"
                 },
-                "id": "6b42785b-273a-4d99-b923-a6c86ddcf2e5",
+                "id": "db6678c2-25ed-4611-9399-9a3bf7e6a761",
                 "name": "get category recursion",
                 "headers": []
               }
@@ -184,7 +575,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/update_category_name.do"
                 },
-                "id": "9086a432-d5b0-4a2f-ab56-8911e90c8352",
+                "id": "6a0550fb-2585-4252-b1ee-bb579e8db241",
                 "name": "update category name",
                 "headers": [
                   {
@@ -200,7 +591,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "eea603ba-eed8-40ab-95bc-52c627d1ece0",
+            "id": "0470bcbf-77c8-4d3f-bb99-815cbb07b7e1",
             "name": "health check"
           },
           "children": [
@@ -231,7 +622,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/healthcheck/health_check.do"
                 },
-                "id": "8996276c-cda4-4166-b400-690f9c7badd8",
+                "id": "2061e56a-1bbc-4d90-8c5a-3d0af8b76fd6",
                 "name": "health check",
                 "headers": []
               }
@@ -241,7 +632,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "c8915988-3fe8-40d5-bb99-c07e00edbd9b",
+            "id": "e2c19397-3912-4360-ab38-3dc875dffe7b",
             "name": "product"
           },
           "children": [
@@ -322,7 +713,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/add.do"
                 },
-                "id": "5fbb0e14-7797-440e-976b-9ed09ce24a3b",
+                "id": "534aedf4-0da3-4517-a8fe-f097734ea827",
                 "name": "add-or-update",
                 "headers": [
                   {
@@ -366,7 +757,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/detail.do"
                 },
-                "id": "7f7a50a7-3e81-4a39-80ad-8611c9fade60",
+                "id": "895c290c-b293-44f0-b3b3-e621e7b7d2e0",
                 "name": "admin get ((will get all products including on-sale, sold-out, deleted)",
                 "headers": []
               }
@@ -411,7 +802,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/list.do"
                 },
-                "id": "7b43b472-f63b-4d78-99e0-758b0560d383",
+                "id": "3ea6822e-769f-47dc-85e2-4d70859477e6",
                 "name": "admin list",
                 "headers": []
               }
@@ -449,7 +840,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/product/detail.do"
                 },
-                "id": "aea47beb-7c0f-42f8-aefd-8aec23ceb384",
+                "id": "6fec8c30-3d42-476d-b6bc-a1e4537f185a",
                 "name": "get(will only get on sale products)",
                 "headers": []
               }
@@ -491,7 +882,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/product/list.do"
                 },
-                "id": "3f5bb7e7-da32-4905-add2-7b53d9751412",
+                "id": "aba8b60f-8f2e-4a4c-8d2d-880153be852e",
                 "name": "list",
                 "headers": []
               }
@@ -534,7 +925,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/search.do"
                 },
-                "id": "df21812c-ed92-4311-9d3d-9a0a1e7abaf8",
+                "id": "fee9c44b-0ffa-424b-97f4-1d54e741fd7c",
                 "name": "search",
                 "headers": []
               }
@@ -580,7 +971,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/update_sale_status.do"
                 },
-                "id": "a00645d5-f28d-4f4d-b7b7-5d595a84d701",
+                "id": "b1574bad-c4d3-43c4-9321-0de50be458fe",
                 "name": "update sale status",
                 "headers": [
                   {
@@ -596,7 +987,7 @@
         {
           "entity": {
             "type": "Scenario",
-            "id": "34043b83-ee04-46aa-922e-2bc823d133f7",
+            "id": "0734fc0c-e7fd-4ae6-9595-5e0864eb6624",
             "name": "user"
           },
           "children": [
@@ -617,13 +1008,13 @@
                         "enabled": true,
                         "type": "Text",
                         "name": "username",
-                        "value": "admin"
+                        "value": "admin1"
                       },
                       {
                         "enabled": true,
                         "type": "Text",
                         "name": "password",
-                        "value": "admin"
+                        "value": "admin1"
                       }
                     ]
                   },
@@ -641,7 +1032,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/login.do"
                 },
-                "id": "d390bb87-6d42-4b22-85e9-9aa5442a2de2",
+                "id": "87568014-864d-49d3-a2e3-b86115fc21f7",
                 "name": "login.do",
                 "headers": [
                   {
@@ -679,7 +1070,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/healthcheck.do"
                 },
-                "id": "0adfbeef-a5f0-43a3-94d0-8c8975331097",
+                "id": "8cad0126-7787-4ced-8432-7bd1a7a2a658",
                 "name": "health check",
                 "headers": []
               }
@@ -749,7 +1140,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/register.do"
                 },
-                "id": "17b5a27d-4b1f-4edf-8d43-240733d1a2cc",
+                "id": "d1d1ecd2-fb19-4ea1-91ca-19bf92323f55",
                 "name": "register",
                 "headers": [
                   {
@@ -798,7 +1189,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/is_unregistered.do"
                 },
-                "id": "936c36b5-5483-4b85-ad07-ad8813078281",
+                "id": "7016d4b4-6933-48af-b363-e5b76c6ec1cd",
                 "name": "check user identity availability",
                 "headers": []
               }
@@ -830,7 +1221,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/get_user_info.do"
                 },
-                "id": "4f292430-a6cf-4f99-a236-5506c339d2ec",
+                "id": "9e8920a8-9fe3-464c-9912-bc10d890f490",
                 "name": "get user information",
                 "headers": []
               }
@@ -842,10 +1233,10 @@
   ],
   "environments": [
     {
-      "id": "a3d5e2cb-e1fa-4573-9a5f-5d7a48ad811f",
+      "id": "f72d0c1f-04fd-48d5-97e8-d6839bd314d1",
       "name": "dev",
       "variables": {
-        "8ece308a-93f5-462c-81b7-5d09d9c73aec": {
+        "924b6f10-fe32-431f-9d6a-66463ca76921": {
           "createdAt": "2021-03-14T13:00:58.378-07:00",
           "name": "",
           "value": "",
