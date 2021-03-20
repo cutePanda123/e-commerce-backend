@@ -986,6 +986,257 @@
         },
         {
           "entity": {
+            "type": "Service",
+            "id": "efe92600-2deb-4c60-9410-95fb5bdb3a0e",
+            "name": "shipping"
+          },
+          "children": [
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverName",
+                        "value": "panda"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverPhone",
+                        "value": "1234567"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverMobile",
+                        "value": "1234567"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverState",
+                        "value": "CA"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverCity",
+                        "value": "San Jose"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverAddress",
+                        "value": "123th Way"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverZipcode",
+                        "value": "9876"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/shipping/add.do"
+                },
+                "id": "c8308fa5-6877-4e33-b080-b09342723c8d",
+                "name": "add",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+                  "name": "DELETE"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "shippingId",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/shipping/delete.do"
+                },
+                "id": "763e96e7-c18f-476c-bc10-bad91726d625",
+                "name": "delete",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "shippingId",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/shipping/list.do"
+                },
+                "id": "125ce352-f66d-43cd-bfd1-47fecc6be456",
+                "name": "get",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/shipping/list.do"
+                },
+                "id": "c3bb4752-38d9-48ac-bd3a-3cd6a61b3f92",
+                "name": "list",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "receiverMobile",
+                        "value": "7654321"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "id",
+                        "value": "1"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/shipping/update.do"
+                },
+                "id": "c08dee11-d522-426c-9e5f-b235a90a0a6c",
+                "name": "update",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "entity": {
             "type": "Scenario",
             "id": "0734fc0c-e7fd-4ae6-9595-5e0864eb6624",
             "name": "user"
