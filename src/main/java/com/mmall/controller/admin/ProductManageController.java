@@ -124,7 +124,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
         }
 
-        String path = request.getSession().getServletContext().getRealPath("upload");
+        String path = request.getSession().getServletContext().getRealPath(Constants.IMAGE_UPLOAD_DIR);
         String targetFileName = iFileService.upload(file, path);
         String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName;
 
@@ -155,7 +155,7 @@ public class ProductManageController {
             return resultMap;
         }
         // return value will follow simditor's one
-        String path = request.getSession().getServletContext().getRealPath("upload");
+        String path = request.getSession().getServletContext().getRealPath(Constants.IMAGE_UPLOAD_DIR);
         String targetFileName = iFileService.upload(file, path);
         if (StringUtils.isBlank(targetFileName)) {
             resultMap.put("success", false);

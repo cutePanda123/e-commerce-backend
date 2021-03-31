@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Constants {
     public static final String CURRENT_USER = "currentUser";
+    public static final String IMAGE_UPLOAD_DIR = "upload";
 
     public static final String EMAIL = "email";
     public static final String USERNAME = "username";
