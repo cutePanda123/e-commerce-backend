@@ -42,6 +42,11 @@ public class OrderController {
         return iOrderService.pay(orderNum, user.getId(), path);
     }
 
+    /*
+        Two ways to test this alipay callback endpoint
+        1. deploy the code to cloud vm, enable remote debug on tomcat server, and config remote debug in local IDEA
+        2. enable local callback endpoint by using Natapp
+     */
     @RequestMapping(value = "alipay_callback.do")
     @ResponseBody
     public Object alipayCallback(HttpServletRequest request) {
