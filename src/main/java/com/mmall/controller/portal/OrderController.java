@@ -1,5 +1,8 @@
 package com.mmall.controller.portal;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.demo.trade.config.Configs;
 import com.google.common.collect.Maps;
 import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
@@ -54,8 +57,23 @@ public class OrderController {
             }
             params.put(name, buffer.toString());
         }
-        logger.info("");
+        logger.info("alipay callback: sign : {}, trade_status: {}, params: {}", params.get("sign"), params.get("trade+status"), params.toString());
 
+        // verify callback data integrity
+        params.remove("sign_type");
+        try {
+            boolean alipayRsaCheckV2Result = AlipaySignature.rsaCheckV2(params, Configs.getAlipayPublicKey(), "utf-8", Configs.getSignType());
+            // ToDo: verify all the data in the callback is correct, for example, username, email, etc
+            boolean verifyAllTheDataResult = true;
+            if (!alipayRsaCheckV2Result || !verifyAllTheDataResult) {
+                logger.error("invalid alipay result");
+                return ServerResponse.createByErrorMessage("invalid alipay callback request");
+            }
+        } catch (AlipayApiException e) {
+            logger.error("alipay callback exception", e);
+            e.printStackTrace();
+        }
+        
         return null;
     }
 }

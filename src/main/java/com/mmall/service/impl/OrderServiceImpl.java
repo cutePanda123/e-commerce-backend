@@ -35,6 +35,13 @@ import java.util.Map;
 
 @Service("iOrderService")
 public class OrderServiceImpl implements IOrderService {
+
+    private static AlipayTradeService tradeService;
+    static {
+        Configs.init("alipayinfo.properties");
+        tradeService = new AlipayTradeServiceImpl.ClientBuilder().setCharset("utf-8").build();
+    }
+
     @Autowired
     private OrderMapper orderMapper;
 
@@ -99,10 +106,7 @@ public class OrderServiceImpl implements IOrderService {
                 .setNotifyUrl(PropertiesUtil.getProperty("alipay.callback.url"))// need to config this callback url in Alipay account
                 .setGoodsDetailList(goodsDetailList);
 
-        Configs.init("zfbinfo.properties");
-        AlipayTradeService tradeService = new AlipayTradeServiceImpl.ClientBuilder().build();
-
-        AlipayF2FPrecreateResult result = tradeService.tradePrecreate(builder);
+        AlipayF2FPrecreateResult result = OrderServiceImpl.tradeService.tradePrecreate(builder);
         switch (result.getTradeStatus()) {
             case SUCCESS:
                 logger.info("alipay order submit success");
