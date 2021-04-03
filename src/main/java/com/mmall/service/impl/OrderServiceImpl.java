@@ -12,13 +12,17 @@ import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.utils.ZxingUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mmall.common.Constants;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.OrderItemMapper;
 import com.mmall.dao.OrderMapper;
+import com.mmall.dao.PayInfoMapper;
 import com.mmall.pojo.Order;
 import com.mmall.pojo.OrderItem;
+import com.mmall.pojo.PayInfo;
 import com.mmall.service.IOrderService;
 import com.mmall.util.BigDecimalUtil;
+import com.mmall.util.DateTimeUtil;
 import com.mmall.util.FtpUtil;
 import com.mmall.util.PropertiesUtil;
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +51,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private OrderItemMapper orderItemMapper;
+
+    @Autowired
+    private PayInfoMapper payInfoMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
@@ -157,4 +164,53 @@ public class OrderServiceImpl implements IOrderService {
             logger.info("body:" + response.getBody());
         }
     }
+
+    public ServerResponse alipayHandler(Map<String, String> params) {
+        Long orderNum = Long.parseLong(params.get("out_trade_no"));
+        String tradeNum = params.get("trade_no");
+        String tradeStatus = params.get("trade_status");
+        Order order = orderMapper.selectByOrderNumber(orderNum);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("not associated order with this alipay callback");
+        }
+        if (order.getStatus() >= Constants.OrderStatusEnum.PAID.getCode()) {
+            return ServerResponse.createByErrorMessage("duplicate alipay callback");
+        }
+        if (Constants.AlipayCallback.TRADE_STATUS_TRADE_SUCCESS.equals(tradeStatus)) {
+            order.setPaymentTime(DateTimeUtil.strToDate(params.get("gmt_payment")));
+            order.setStatus(Constants.OrderStatusEnum.PAID.getCode());
+            orderMapper.updateByPrimaryKeySelective(order);
+        }
+
+        PayInfo payInfo = new PayInfo();
+        payInfo.setUserId(order.getUserId());
+        payInfo.setOrderNo(order.getOrderNo());
+        payInfo.setPaymentPlatform(Integer.valueOf(Constants.PaymentMethod.ALIPAY.getCode()).byteValue());
+        payInfo.setPlatformPaymentId(tradeNum);
+        payInfo.setPlatformStatus(tradeStatus);
+
+        payInfoMapper.insert(payInfo);
+
+        return ServerResponse.createBySuccess();
+    }
+
+    public ServerResponse queryOrderPaymentStatus(Integer userId, Long orderNum) {
+        Order order = orderMapper.selectByUserIdAndOrderNumber(userId, orderNum);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("user does not have this order");
+        }
+        if (order.getStatus() >= Constants.OrderStatusEnum.PAID.getCode()) {
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
 }
+
+
+
+
+
+
+
+
+

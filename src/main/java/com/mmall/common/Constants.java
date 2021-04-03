@@ -42,4 +42,43 @@ public class Constants {
         private int code;
         private String value;
     }
+
+    @AllArgsConstructor
+    @Getter
+    public enum OrderStatusEnum {
+        CANCELED(0, "canceled"),
+        PENDING_PAYMENT(10, "pending payment"),
+        PAID(20, "paid"),
+        SHIPPED(40, "shipped"),
+        SUCCESS(50, "order success"),
+        CLOSED(60, "order closed");
+
+        private int code;
+        private String value;
+    }
+
+    public interface AlipayCallback {
+        String TRADE_STATUS_WAIT_BUYER_PAYMENT = "WAIT_BUYER_PAY";
+        String TRADE_STATUS_TRADE_SUCCESS = "TRADE_SUCCESS";
+
+        String RESPONSE_SUCCESS = "success";
+        String RESPONSE_FAILED = "failed";
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public enum PaymentMethod {
+        ALIPAY(1, "Alipay");
+
+        private int code;
+        private String value;
+    }
 }
+
+
+
+
+
+
+
+

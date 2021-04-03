@@ -73,7 +73,23 @@ public class OrderController {
             logger.error("alipay callback exception", e);
             e.printStackTrace();
         }
-        
-        return null;
+
+        ServerResponse response = iOrderService.alipayHandler(params);
+        if (response.isSuccess()) {
+            return Constants.AlipayCallback.RESPONSE_SUCCESS;
+        }
+        return Constants.AlipayCallback.RESPONSE_FAILED;
+    }
+
+    @RequestMapping(value = "query_order_payment_status.do", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse queryOrderPaymentStatus(HttpSession session, Long orderNum) {
+        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        ServerResponse response = iOrderService.queryOrderPaymentStatus(user.getId(), orderNum);
+
+        return response.isSuccess() ? ServerResponse.createBySuccess(true) : ServerResponse.createBySuccess(false);
     }
 }

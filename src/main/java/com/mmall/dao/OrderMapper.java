@@ -17,4 +17,6 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     Order selectByUserIdAndOrderNumber(@Param("userId") Integer userId, @Param("orderNumber") Long orderNumber);
+
+    Order selectByOrderNumber(Long orderNum);
 }
