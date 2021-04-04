@@ -11,6 +11,8 @@ import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.utils.ZxingUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mmall.common.Constants;
@@ -71,6 +73,25 @@ public class OrderServiceImpl implements IOrderService {
     private ShippingMapper shippingMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    public ServerResponse<PageInfo> getOrderList(Integer userId, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Order> orderList = orderMapper.selectByUserId(userId);
+        List<OrderVo> orderVoList = buildOrderVoList(orderList, userId);
+        PageInfo pageInfo = new PageInfo(orderVoList);
+        pageInfo.setList(orderVoList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    public ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo) {
+        Order order = orderMapper.selectByUserIdAndOrderNumber(userId, orderNo);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("cannot find order with order number");
+        }
+        List<OrderItem> orderItemList = orderItemMapper.selectByOrderNoAndUserId(orderNo, userId);
+        OrderVo orderVo = buildOrderVo(order, orderItemList);
+        return ServerResponse.createBySuccess(orderVo);
+    }
 
     public ServerResponse getOrderCartProduct(Integer userId) {
         OrderProductVo orderProductVo = new OrderProductVo();
@@ -420,6 +441,25 @@ public class OrderServiceImpl implements IOrderService {
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByError();
+    }
+
+    private List<OrderVo> buildOrderVoList(List<Order> orderList, Integer userId) {
+        List<OrderVo> orderVoList = Lists.newArrayList();
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = null;
+            if (isAdminUser(userId)) {
+                // to do
+            } else {
+                orderItemList = orderItemMapper.selectByOrderNoAndUserId(order.getOrderNo(), userId);
+                OrderVo orderVo = buildOrderVo(order, orderItemList);
+                orderVoList.add(orderVo);
+            }
+        }
+        return orderVoList;
+    }
+
+    private boolean isAdminUser(Integer userId) {
+        return userId == null;
     }
 }
 
