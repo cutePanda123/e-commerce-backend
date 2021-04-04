@@ -40,10 +40,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service("iOrderService")
 public class OrderServiceImpl implements IOrderService {
@@ -73,6 +70,54 @@ public class OrderServiceImpl implements IOrderService {
     private ShippingMapper shippingMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    public ServerResponse<String> adminShipProducts(Long orderNo) {
+        Order order = orderMapper.selectByOrderNumber(orderNo);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("cannot find order");
+        }
+        if (order.getStatus() != Constants.OrderStatusEnum.PAID.getCode()) {
+            return ServerResponse.createByErrorMessage("only paid order can be shipped");
+        }
+        order.setStatus(Constants.OrderStatusEnum.SHIPPED.getCode());
+        order.setShippedTime(new Date());
+        orderMapper.updateByPrimaryKeySelective(order);
+
+        return ServerResponse.createBySuccess("order shipped");
+    }
+
+    public ServerResponse<PageInfo> adminSearchOrders(Long orderNo, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Order order = orderMapper.selectByOrderNumber(orderNo);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("cannot find order");
+        }
+        List<OrderItem> orderItemList = orderItemMapper.selectByOrderNo(orderNo);
+        OrderVo orderVo = buildOrderVo(order, orderItemList);
+
+        PageInfo pageInfo = new PageInfo(Lists.newArrayList(orderVo));
+        pageInfo.setList(Lists.newArrayList(orderVo));
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    public ServerResponse<OrderVo> adminGetOrderDetail(Long orderNo) {
+        Order order = orderMapper.selectByOrderNumber(orderNo);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("cannot find order");
+        }
+        List<OrderItem> orderItemList = orderItemMapper.selectByOrderNo(orderNo);
+        OrderVo orderVo = buildOrderVo(order, orderItemList);
+        return ServerResponse.createBySuccess(orderVo);
+    }
+
+    public ServerResponse<PageInfo> adminGetOrderList(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Order> orderList = orderMapper.selectAllOrders();
+        List<OrderVo> orderVoList = buildOrderVoList(orderList, null);
+        PageInfo pageInfo = new PageInfo(orderVoList);
+        pageInfo.setList(orderVoList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
 
     public ServerResponse<PageInfo> getOrderList(Integer userId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -448,12 +493,12 @@ public class OrderServiceImpl implements IOrderService {
         for (Order order : orderList) {
             List<OrderItem> orderItemList = null;
             if (isAdminUser(userId)) {
-                // to do
+                orderItemList = orderItemMapper.selectByOrderNo(Long.valueOf(order.getOrderNo()));
             } else {
-                orderItemList = orderItemMapper.selectByOrderNoAndUserId(order.getOrderNo(), userId);
-                OrderVo orderVo = buildOrderVo(order, orderItemList);
-                orderVoList.add(orderVo);
+                orderItemList = orderItemMapper.selectByOrderNoAndUserId(Long.valueOf(order.getOrderNo()), userId);
             }
+            OrderVo orderVo = buildOrderVo(order, orderItemList);
+            orderVoList.add(orderVo);
         }
         return orderVoList;
     }

@@ -22,4 +22,13 @@ public interface IOrderService {
     public ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo);
 
     public ServerResponse<PageInfo> getOrderList(Integer userId, Integer pageNum, Integer pageSize);
+
+    public ServerResponse<PageInfo> adminGetOrderList(Integer pageNum, Integer pageSize);
+
+    public ServerResponse<OrderVo> adminGetOrderDetail(Long orderNo);
+
+    // to do: will change to search by other factors
+    public ServerResponse<PageInfo> adminSearchOrders(Long orderNo, Integer pageNum, Integer pageSize);
+
+    public ServerResponse<String> adminShipProducts(Long orderNo);
 }
