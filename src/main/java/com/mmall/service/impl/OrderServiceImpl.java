@@ -1,6 +1,7 @@
 package com.mmall.service.impl;
 
 import com.alipay.api.AlipayResponse;
+import com.alipay.api.domain.Car;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.ExtendParams;
@@ -14,18 +15,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mmall.common.Constants;
 import com.mmall.common.ServerResponse;
-import com.mmall.dao.OrderItemMapper;
-import com.mmall.dao.OrderMapper;
-import com.mmall.dao.PayInfoMapper;
-import com.mmall.pojo.Order;
-import com.mmall.pojo.OrderItem;
-import com.mmall.pojo.PayInfo;
+import com.mmall.dao.*;
+import com.mmall.pojo.*;
 import com.mmall.service.IOrderService;
 import com.mmall.util.BigDecimalUtil;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.FtpUtil;
 import com.mmall.util.PropertiesUtil;
+import com.mmall.vo.OrderItemVo;
+import com.mmall.vo.OrderVo;
+import com.mmall.vo.ShippingVo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +35,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service("iOrderService")
 public class OrderServiceImpl implements IOrderService {
@@ -55,7 +59,178 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private PayInfoMapper payInfoMapper;
 
+    @Autowired
+    private CartMapper cartMapper;
+
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
+    private ShippingMapper shippingMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    public ServerResponse createOrder(Integer userId, Integer shippingId) {
+        List<Cart> cartItemList = cartMapper.selectCartsByUserId(userId);
+        ServerResponse<List<OrderItem>> response = this.getCartOrderItems(userId, cartItemList);
+        if (!response.isSuccess()) {
+            return response;
+        }
+        List<OrderItem> orderItemList = response.getData();
+        BigDecimal totalPrice = getOrderTotalPrice(orderItemList);
+
+        Order order = buildOrder(userId, shippingId, totalPrice);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("order creation failed");
+        }
+        if (CollectionUtils.isEmpty(orderItemList)) {
+            return ServerResponse.createByErrorMessage("cart is empty");
+        }
+        for (OrderItem orderItem : orderItemList) {
+            orderItem.setOrderNo(order.getOrderNo());
+        }
+
+        orderItemMapper.batchInsert(orderItemList);
+        reduceStocks(orderItemList);
+        cleanCart(cartItemList);
+
+        OrderVo orderVo = buildOrderVo(order, orderItemList);
+        return ServerResponse.createBySuccess(orderVo);
+    }
+
+    private OrderVo buildOrderVo(Order order, List<OrderItem> orderItemList) {
+        OrderVo orderVo = new OrderVo();
+
+        orderVo.setOrderNo(order.getOrderNo());
+        orderVo.setPayment(order.getPayment());
+        orderVo.setPaymentType(order.getPaymentType());
+        orderVo.setPaymentTypeDesc(Constants.PaymentTypeEnum.codeOf(order.getPaymentType()).getValue());
+
+        orderVo.setShippingFee(order.getShippingFee());
+        orderVo.setStatus(order.getStatus());
+        orderVo.setStatusDesc(Constants.OrderStatusEnum.codeOf(order.getStatus()).getValue());
+
+        orderVo.setShippingId(order.getShippingAddressId());
+        Shipping shipping = shippingMapper.selectByPrimaryKey(order.getShippingAddressId());
+        if (shipping != null) {
+            orderVo.setReceiverName(shipping.getReceiverName());
+            orderVo.setShippingVo(buildShippingVo(shipping));
+        }
+
+        orderVo.setPaymentTime(order.getPaymentTime());
+        orderVo.setShippedTime(order.getShippedTime());
+        orderVo.setDeliveredTime(order.getDeliveredTime());
+        orderVo.setClosedTime(order.getClosedTime());
+        orderVo.setCreateTime(order.getCreateTime());
+
+        orderVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
+        List<OrderItemVo> orderItemVoList = Lists.newArrayList();
+        for (OrderItem orderItem : orderItemList) {
+            OrderItemVo orderItemVo = buildOrderItemVo(orderItem);
+            orderItemVoList.add(orderItemVo);
+        }
+        orderVo.setOrderItemVoList(orderItemVoList);
+        return orderVo;
+    }
+
+    private OrderItemVo buildOrderItemVo(OrderItem orderItem) {
+        OrderItemVo orderItemVo = new OrderItemVo();
+        orderItemVo.setOrderNo(orderItem.getOrderNo());
+        orderItemVo.setProductId(orderItem.getProductId());
+        orderItemVo.setProductName(orderItem.getProductName());
+        orderItemVo.setProductUnitPrice(orderItem.getProductUnitPrice());
+        orderItemVo.setProductImageUrl(orderItem.getProductImageUrl());
+        orderItem.setQuantity(orderItem.getQuantity());
+        orderItem.setTotalPrice(orderItem.getTotalPrice());
+        orderItemVo.setCreateTime(orderItem.getCreateTime());
+        return orderItemVo;
+    }
+
+    private ShippingVo buildShippingVo(Shipping shipping) {
+        ShippingVo shippingVo = new ShippingVo();
+        shippingVo.setReceiverName(shipping.getReceiverName());
+        shippingVo.setReceiverAddress(shipping.getReceiverAddress());
+        shippingVo.setReceiverState(shipping.getReceiverState());
+        shippingVo.setReceiverCity(shipping.getReceiverCity());
+        shippingVo.setReceiverAddress(shipping.getReceiverAddress());
+        shippingVo.setReceiverMobile(shipping.getReceiverMobile());
+        shippingVo.setReceiverPhone(shipping.getReceiverPhone());
+        shippingVo.setReceiverMobile(shipping.getReceiverMobile());
+        shippingVo.setReceiverMobile(shipping.getReceiverZipcode());
+        return shippingVo;
+    }
+
+    private void cleanCart(List<Cart> cartItemList) {
+        for (Cart cartItem : cartItemList) {
+            cartMapper.deleteByPrimaryKey(cartItem.getId());
+        }
+    }
+
+    private void reduceStocks(List<OrderItem> orderItemList) {
+        for (OrderItem orderItem : orderItemList) {
+            Product product = productMapper.selectByPrimaryKey(orderItem.getProductId());
+            product.setStock(product.getStock() - orderItem.getQuantity());
+            productMapper.updateByPrimaryKeySelective(product);
+        }
+    }
+
+    private Order buildOrder(Integer userId, Integer shippingId, BigDecimal payment) {
+        Order order = new Order();
+        long orderNo = generateOrderNo();
+        order.setOrderNo((int)orderNo);
+        order.setStatus(Constants.OrderStatusEnum.PENDING_PAYMENT.getCode());
+        order.setShippingFee(new BigDecimal("0"));
+        order.setPaymentType(Integer.valueOf(Constants.PaymentTypeEnum.ONLINE_PAYMENT.getCode()).byteValue());
+        order.setPayment(payment);
+
+        order.setUserId(userId);
+        order.setShippingAddressId(shippingId);
+        int rowCount = orderMapper.insert(order);
+        if (rowCount > 0) {
+            return order;
+        }
+        return null;
+    }
+
+    private long generateOrderNo() {
+        long time = System.currentTimeMillis();
+        return time + (new Random().nextInt() % 10);
+    }
+
+    private BigDecimal getOrderTotalPrice(List<OrderItem> orderItemList) {
+        BigDecimal total = new BigDecimal("0");
+        for (OrderItem orderItem : orderItemList) {
+            total = BigDecimalUtil.add(total.doubleValue(), orderItem.getTotalPrice().doubleValue());
+        }
+        return total;
+    }
+
+    private ServerResponse<List<OrderItem>> getCartOrderItems(Integer userId, List<Cart> cartItemList) {
+        List<OrderItem> orderItemList = Lists.newArrayList();
+        if (CollectionUtils.isEmpty(orderItemList)) {
+            return ServerResponse.createByErrorMessage("cart is empty");
+        }
+        for (Cart cartItem : cartItemList) {
+            Product product = productMapper.selectByPrimaryKey(cartItem.getProductId());
+            if (product.getStatus() != Constants.ProductStatusEnum.ON_SALE.getCode()) {
+                return ServerResponse.createByErrorMessage("product " + product.getName() + " is not in sale state");
+            }
+            if (cartItem.getQuantity() > product.getStock()) {
+                return ServerResponse.createByErrorMessage("product " + product.getName() + " does not have enough stock");
+            }
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setUserId(userId);
+            orderItem.setProductId(product.getId());
+            orderItem.setProductName(product.getName());
+            orderItem.setProductImageUrl(product.getMainImageUrl());
+            orderItem.setProductUnitPrice(product.getPrice());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setTotalPrice(BigDecimalUtil.mul(product.getPrice().doubleValue(), cartItem.getQuantity()));
+            orderItemList.add(orderItem);
+        }
+        return ServerResponse.createBySuccess(orderItemList);
+    }
 
     public ServerResponse pay(Long orderNum, Integer userId, String paymentQrCodePath) {
         Map<String, String> results = Maps.newHashMap();

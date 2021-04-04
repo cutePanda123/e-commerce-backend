@@ -55,6 +55,15 @@ public class Constants {
 
         private int code;
         private String value;
+
+        public static OrderStatusEnum codeOf(int code) {
+            for (OrderStatusEnum orderStatusEnum : values()) {
+                if (orderStatusEnum.getCode() == code) {
+                    return orderStatusEnum;
+                }
+            }
+            throw new RuntimeException("cannot find enum");
+        }
     }
 
     public interface AlipayCallback {
@@ -72,6 +81,24 @@ public class Constants {
 
         private int code;
         private String value;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public enum PaymentTypeEnum {
+        ONLINE_PAYMENT(1, "ONLINE_PAYMENT");
+
+        private int code;
+        private String value;
+
+        public static PaymentTypeEnum codeOf(int code) {
+            for (PaymentTypeEnum paymentTypeEnum : values()) {
+                if (paymentTypeEnum.getCode() == code) {
+                    return paymentTypeEnum;
+                }
+            }
+            throw new RuntimeException("cannot find enum");
+        }
     }
 }
 

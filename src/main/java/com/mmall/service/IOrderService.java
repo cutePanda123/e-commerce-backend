@@ -10,4 +10,6 @@ public interface IOrderService {
     public ServerResponse alipayHandler(Map<String, String> params);
 
     public ServerResponse queryOrderPaymentStatus(Integer userId, Long orderNum);
+
+    public ServerResponse createOrder(Integer userId, Integer shippingId);
 }

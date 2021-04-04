@@ -30,4 +30,6 @@ public interface CartMapper {
     int selectOrUnselectCartItems(@Param("userId") Integer userId, @Param("productId") Integer productId, @Param("isSelected") Integer isSelected);
 
     int selectCartItemTotalQuantity(@Param("userId") Integer userId);
+
+    List<Cart> selectSelectedCartItemByUserId(Integer userid);
 }

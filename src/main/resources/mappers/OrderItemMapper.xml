@@ -170,4 +170,16 @@
     where order_no = #{orderNo}
     and user_id = #{userId}
   </select>
+  
+  <insert id="batchInsert" parameterType="list">
+    insert into mmall_order_detail (id, order_no, user_id,
+    product_id, product_unit_price, product_name,
+    product_image_url, quantity, total_price,
+    create_time, update_time)
+    <foreach collection="orderItemList" index="index" item="item" separator=",">
+      (
+      #{item.id},#{item.orderNo},#{item.userId},#{item.productId},#{item.productUnitPrice},#{item.productName},#{item.productImageUrl},#{item.quantity},#{item.totalPrice},now(),now()
+      )
+    </foreach>
+  </insert>
 </mapper>
