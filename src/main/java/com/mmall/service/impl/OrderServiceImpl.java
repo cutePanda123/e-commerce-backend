@@ -23,8 +23,10 @@ import com.mmall.util.DateTimeUtil;
 import com.mmall.util.FtpUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.OrderItemVo;
+import com.mmall.vo.OrderProductVo;
 import com.mmall.vo.OrderVo;
 import com.mmall.vo.ShippingVo;
+import net.sf.jsqlparser.util.deparser.UpdateDeParser;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.weaver.ast.Or;
@@ -69,6 +71,46 @@ public class OrderServiceImpl implements IOrderService {
     private ShippingMapper shippingMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    public ServerResponse getOrderCartProduct(Integer userId) {
+        OrderProductVo orderProductVo = new OrderProductVo();
+
+        List<Cart> cartList = cartMapper.selectCartsByUserId(userId);
+        ServerResponse response = getCartOrderItems(userId, cartList);
+        if (!response.isSuccess()) {
+            return response;
+        }
+        List<OrderItem> orderItemList = (List<OrderItem>)response.getData();
+        List<OrderItemVo> orderItemVoList = Lists.newArrayList();
+
+        BigDecimal totalPrice = new BigDecimal("0");
+        for (OrderItem orderItem : orderItemList) {
+            totalPrice = BigDecimalUtil.add(totalPrice.doubleValue(), orderItem.getTotalPrice().doubleValue());
+            orderItemVoList.add(buildOrderItemVo(orderItem));
+        }
+        orderProductVo.setOrderItemVoList(orderItemVoList);
+        orderProductVo.setTotalPrice(totalPrice);
+        orderProductVo.setFtpServerHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
+
+        return ServerResponse.createBySuccess(orderProductVo);
+    }
+
+    public ServerResponse cancelOrder(Integer userId, Long orderNo) {
+        Order order = orderMapper.selectByUserIdAndOrderNumber(userId, orderNo);
+
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("user does not have this order");
+        }
+        if (order.getStatus() != Constants.OrderStatusEnum.PENDING_PAYMENT.getCode()) {
+            return ServerResponse.createByErrorMessage("paid order cannot be canceled");
+        }
+        Order canceledOrder = new Order();
+        canceledOrder.setId(order.getId());
+        canceledOrder.setStatus(Constants.OrderStatusEnum.CANCELED.getCode());
+
+        int rowCount = orderMapper.updateByPrimaryKeySelective(canceledOrder);
+        return rowCount > 0 ? ServerResponse.createBySuccess() : ServerResponse.createByError();
+    }
 
     public ServerResponse createOrder(Integer userId, Integer shippingId) {
         List<Cart> cartItemList = cartMapper.selectCartsByUserId(userId);
