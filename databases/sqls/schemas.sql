@@ -107,6 +107,9 @@ CREATE TABLE `mmall_order_detail` (
     UNIQUE KEY `order_no_user_id_index` (`order_no`, `user_id`) USING HASH
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARACTER SET=utf8;
 
+#ALTER TABLE mmall_order_detail DROP INDEX order_no_index;
+#ALTER TABLE mmall_order_detail DROP INDEX order_no_user_id_index;
+
 CREATE TABLE `mmall_shipping_address` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int(11) NOT NULL DEFAULT 0,
