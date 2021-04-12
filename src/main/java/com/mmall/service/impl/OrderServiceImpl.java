@@ -284,7 +284,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private Order buildOrder(Integer userId, Integer shippingId, BigDecimal payment) {
         Order order = new Order();
-        long orderNo = generateOrderNo();
+        int orderNo = generateOrderNo();
         order.setOrderNo(orderNo);
         order.setStatus(Constants.OrderStatusEnum.PENDING_PAYMENT.getCode());
         order.setShippingFee(new BigDecimal("0"));
@@ -300,9 +300,9 @@ public class OrderServiceImpl implements IOrderService {
         return null;
     }
 
-    private long generateOrderNo() {
-        long time = System.currentTimeMillis();
-        return time + (new Random().nextInt() % 10);
+    private int generateOrderNo() {
+        int time = (int)(System.currentTimeMillis() % (Integer.MAX_VALUE));
+        return time;
     }
 
     private BigDecimal getOrderTotalPrice(List<OrderItem> orderItemList) {
