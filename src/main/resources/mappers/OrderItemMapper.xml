@@ -166,7 +166,7 @@
   <select id="selectByOrderNoAndUserId" parameterType="map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from mmall_order_item
+    from mmall_order_detail
     where order_no = #{orderNo}
     and user_id = #{userId}
   </select>
