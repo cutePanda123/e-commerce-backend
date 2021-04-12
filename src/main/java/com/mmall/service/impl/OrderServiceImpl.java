@@ -47,7 +47,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private static AlipayTradeService tradeService;
     static {
-        Configs.init("alipayinfo.properties");
+        Configs.init("alipayinfo.test.properties");
         tradeService = new AlipayTradeServiceImpl.ClientBuilder().setCharset("utf-8").build();
     }
 
@@ -285,7 +285,7 @@ public class OrderServiceImpl implements IOrderService {
     private Order buildOrder(Integer userId, Integer shippingId, BigDecimal payment) {
         Order order = new Order();
         long orderNo = generateOrderNo();
-        order.setOrderNo((int)orderNo);
+        order.setOrderNo(orderNo);
         order.setStatus(Constants.OrderStatusEnum.PENDING_PAYMENT.getCode());
         order.setShippingFee(new BigDecimal("0"));
         order.setPaymentType(Integer.valueOf(Constants.PaymentTypeEnum.ONLINE_PAYMENT.getCode()).byteValue());
@@ -315,7 +315,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private ServerResponse<List<OrderItem>> getCartOrderItems(Integer userId, List<Cart> cartItemList) {
         List<OrderItem> orderItemList = Lists.newArrayList();
-        if (CollectionUtils.isEmpty(orderItemList)) {
+        if (CollectionUtils.isEmpty(cartItemList)) {
             return ServerResponse.createByErrorMessage("cart is empty");
         }
         for (Cart cartItem : cartItemList) {
