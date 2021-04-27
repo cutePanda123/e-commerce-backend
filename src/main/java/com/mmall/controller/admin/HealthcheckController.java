@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/manage/healthcheck")
+@RequestMapping(value = "/manage/health")
 public class HealthcheckController {
-    @RequestMapping(value = "/health_check.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/check.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> healthcheck() {
         return ServerResponse.createBySuccessMessage("service is healthy.");

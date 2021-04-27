@@ -15,6 +15,10 @@ public class Constants {
 
     public static final String CACHE_TOKEN_PREFIX = "token_";
 
+    public interface RedisCacheExpirationTime {
+        int REDIS_SESSION_EXPIRATION_TIME = 60 * 30;
+    }
+
     public interface Role {
         int ROLE_CUSTOMER = 0;
         int ROLE_ADMIN = 1;
