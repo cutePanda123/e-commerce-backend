@@ -5,6 +5,7 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -24,11 +27,14 @@ public class UserController {
 
     @RequestMapping(value = "login.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession session) {
+    public ServerResponse<User> login(
+            String username,
+            String password,
+            HttpSession session,
+            HttpServletResponse httpServletResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
-            session.setAttribute(Constants.CURRENT_USER, response.getData());
-
+            CookieUtil.writeLoginToken(httpServletResponse, session.getId());
             RedisUtil.setEx(
                     session.getId(),
                     JsonUtil.obj2str(response.getData()),
@@ -39,8 +45,11 @@ public class UserController {
 
     @RequestMapping(value = "logout.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session) {
-        session.removeAttribute(Constants.CURRENT_USER);
+    public ServerResponse<String> logout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        String userInfoStr = RedisUtil.get(token);
+        CookieUtil.deleteLoginToken(request, response);
+        RedisUtil.delete(token);
         return ServerResponse.createBySuccess();
     }
 
@@ -58,8 +67,10 @@ public class UserController {
 
     @RequestMapping(value = "get_user_info.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<User> getUserInfo(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<User> getUserInfo(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user != null) {
             return ServerResponse.createBySuccess(user);
         }
