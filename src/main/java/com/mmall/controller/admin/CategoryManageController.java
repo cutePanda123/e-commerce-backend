@@ -1,11 +1,15 @@
 package com.mmall.controller.admin;
 
+import com.github.pagehelper.StringUtil;
 import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.ICategoryService;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -27,10 +32,15 @@ public class CategoryManageController {
     @RequestMapping(value = "add_category.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse addCategory(
-            HttpSession session,
+            HttpServletRequest request,
             String categoryName,
             @RequestParam(value = "parentId", defaultValue = "0")Integer parentId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
                     ResponseCode.NEED_LOGIN.getCode(),
@@ -46,10 +56,15 @@ public class CategoryManageController {
     @RequestMapping(value = "update_category_name.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse updateCategoryName(
-            HttpSession session,
+            HttpServletRequest request,
             String categoryName,
             Integer categoryId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
                     ResponseCode.NEED_LOGIN.getCode(),
@@ -65,10 +80,15 @@ public class CategoryManageController {
     @RequestMapping(value = "get_subcategory.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse getSubCategoryWithoutRecursion(
-            HttpSession session,
+            HttpServletRequest request,
             @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId
     ) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
                     ResponseCode.NEED_LOGIN.getCode(),
@@ -84,10 +104,15 @@ public class CategoryManageController {
     @RequestMapping(value = "get_subcategory_recursion.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse getSubCategoryWithRecursion(
-            HttpSession session,
+            HttpServletRequest request,
             @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId
     ) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
                     ResponseCode.NEED_LOGIN.getCode(),

@@ -1,5 +1,6 @@
 package com.mmall.controller.portal;
 
+import com.github.pagehelper.StringUtil;
 import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
@@ -47,7 +48,6 @@ public class UserController {
     @ResponseBody
     public ServerResponse<String> logout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
         String token = CookieUtil.readLoginToken(request);
-        String userInfoStr = RedisUtil.get(token);
         CookieUtil.deleteLoginToken(request, response);
         RedisUtil.delete(token);
         return ServerResponse.createBySuccess();
@@ -69,6 +69,9 @@ public class UserController {
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpServletRequest request) {
         String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
         String userInfoStr = RedisUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user != null) {
@@ -97,8 +100,13 @@ public class UserController {
 
     @RequestMapping(value = "reset_password.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> resetPassword(HttpSession session, String oldPassword, String newPassword) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<String> resetPassword(HttpServletRequest request, String oldPassword, String newPassword) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("user has not login");
         }
@@ -107,8 +115,13 @@ public class UserController {
 
     @RequestMapping(value = "update_user_information.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> updateInformation(HttpSession session, User user) {
-        User savedUser = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<User> updateInformation(HttpServletRequest request, User user) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User savedUser = JsonUtil.str2obj(userInfoStr, User.class);
         if (savedUser == null) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
@@ -117,15 +130,23 @@ public class UserController {
         ServerResponse<User> response = iUserService.updateUserInformation(user);
         if (response.isSuccess()) {
             response.getData().setUsername(savedUser.getUsername());
-            session.setAttribute(Constants.CURRENT_USER, response.getData());
+            RedisUtil.setEx(
+                    token,
+                    JsonUtil.obj2str(response.getData()),
+                    Constants.RedisCacheExpirationTime.REDIS_SESSION_EXPIRATION_TIME);
         }
         return response;
     }
 
     @RequestMapping(value = "get_user_information.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<User> getInformation(HttpSession session) {
-        User currentUser = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<User> getInformation(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User currentUser = JsonUtil.str2obj(userInfoStr, User.class);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(
                     ResponseCode.NEED_LOGIN.getCode(),

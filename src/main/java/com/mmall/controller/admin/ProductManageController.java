@@ -1,5 +1,6 @@
 package com.mmall.controller.admin;
 
+import com.github.pagehelper.StringUtil;
 import com.google.common.collect.Maps;
 import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
@@ -9,7 +10,10 @@ import com.mmall.pojo.User;
 import com.mmall.service.IFileService;
 import com.mmall.service.IProductService;
 import com.mmall.service.IUserService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
 import com.mmall.util.PropertiesUtil;
+import com.mmall.util.RedisUtil;
 import com.mmall.vo.ProductDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
@@ -41,8 +45,13 @@ public class ProductManageController {
 
     @RequestMapping(value = "add.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse addProduct(HttpSession session, Product product) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse addProduct(HttpServletRequest request, Product product) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
         }
@@ -54,8 +63,13 @@ public class ProductManageController {
 
     @RequestMapping(value = "update_sale_status.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse updateSaleStatus(HttpSession session, Integer productId, Integer status) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse updateSaleStatus(HttpServletRequest request, Integer productId, Integer status) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
         }
@@ -67,8 +81,13 @@ public class ProductManageController {
 
     @RequestMapping(value = "detail.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse manageProductDetail(HttpSession session, Integer productId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse manageProductDetail(HttpServletRequest request, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
         }
@@ -80,9 +99,16 @@ public class ProductManageController {
 
     @RequestMapping(value = "list.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse listProducts(HttpSession session, @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
-                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse listProducts(
+            HttpServletRequest request,
+            @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
         }
@@ -95,12 +121,17 @@ public class ProductManageController {
     @RequestMapping(value = "search.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse searchProducts(
-            HttpSession session,
+            HttpServletRequest request,
             Integer productId,
             String productName,
             @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
         }
@@ -116,7 +147,12 @@ public class ProductManageController {
             HttpSession session,
             @RequestParam(value = "uploadFile", required = false) MultipartFile file,
             HttpServletRequest request) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
         }
@@ -137,13 +173,19 @@ public class ProductManageController {
     @RequestMapping(value = "richtext_img_upload.do", method = RequestMethod.POST)
     @ResponseBody
     public Map richtextImageUpload(
-            HttpSession session,
-            @RequestParam(value = "uploadFile", required = false) MultipartFile file,
             HttpServletRequest request,
+            @RequestParam(value = "uploadFile", required = false) MultipartFile file,
             HttpServletResponse response
     ) {
         Map resultMap = Maps.newHashMap();
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            resultMap.put("success", false);
+            resultMap.put("msg", "user does not login");
+            return resultMap;
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             resultMap.put("success", false);
             resultMap.put("msg", "user does not login");

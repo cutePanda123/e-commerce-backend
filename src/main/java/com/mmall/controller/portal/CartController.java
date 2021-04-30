@@ -1,10 +1,14 @@
 package com.mmall.controller.portal;
 
+import com.github.pagehelper.StringUtil;
 import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.ICartService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisUtil;
 import com.mmall.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -22,8 +27,13 @@ public class CartController {
 
     @RequestMapping(value = "list.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<CartVo> listCartItems(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> listCartItems(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -32,8 +42,13 @@ public class CartController {
 
     @RequestMapping(value = "add.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> addCartItems(HttpSession session, Integer count, Integer productId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> addCartItems(HttpServletRequest request, Integer count, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -42,8 +57,13 @@ public class CartController {
 
     @RequestMapping(value = "update.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> update(HttpSession session, Integer count, Integer productId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> update(HttpServletRequest request, Integer count, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -52,8 +72,13 @@ public class CartController {
 
     @RequestMapping(value = "select_all.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> selectAll(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> selectAll(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -62,8 +87,13 @@ public class CartController {
 
     @RequestMapping(value = "unselect_all.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> unselectAll(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> unselectAll(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -72,8 +102,13 @@ public class CartController {
 
     @RequestMapping(value = "select.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> select(HttpSession session, Integer productId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> select(HttpServletRequest request, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -82,8 +117,13 @@ public class CartController {
 
     @RequestMapping(value = "unselect.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<CartVo> unselect(HttpSession session, Integer productId) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> unselect(HttpServletRequest request, Integer productId) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -92,8 +132,13 @@ public class CartController {
 
     @RequestMapping(value = "delete.do", method = RequestMethod.DELETE)
     @ResponseBody
-    public ServerResponse<CartVo> delete(HttpSession session, String productIds) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<CartVo> delete(HttpServletRequest request, String productIds) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -102,8 +147,13 @@ public class CartController {
 
     @RequestMapping(value = "get_cart_items_quantity.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<Integer> getCartItemsTotalQuantity(HttpSession session) {
-        User user = (User) session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse<Integer> getCartItemsTotalQuantity(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createBySuccess(0);
         }

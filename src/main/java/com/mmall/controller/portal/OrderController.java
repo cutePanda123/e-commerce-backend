@@ -3,12 +3,16 @@ package com.mmall.controller.portal;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.demo.trade.config.Configs;
+import com.github.pagehelper.StringUtil;
 import com.google.common.collect.Maps;
 import com.mmall.common.Constants;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
+import com.mmall.util.CookieUtil;
+import com.mmall.util.JsonUtil;
+import com.mmall.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +37,13 @@ public class OrderController {
 
     @RequestMapping(value = "pay.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse pay(HttpSession session, Long orderNum, HttpServletRequest request) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse pay(Long orderNum, HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -89,8 +98,13 @@ public class OrderController {
 
     @RequestMapping(value = "query_order_payment_status.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse queryOrderPaymentStatus(HttpSession session, Long orderNum) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse queryOrderPaymentStatus(HttpServletRequest request, Long orderNum) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -101,8 +115,13 @@ public class OrderController {
 
     @RequestMapping(value = "create.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse pay(HttpSession session, Integer shippingId) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse pay(HttpServletRequest request, Integer shippingId) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -112,8 +131,13 @@ public class OrderController {
 
     @RequestMapping(value = "cancel.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse cancel(HttpSession session, Long orderNo) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse cancel(HttpServletRequest request, Long orderNo) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -123,8 +147,13 @@ public class OrderController {
 
     @RequestMapping(value = "get_order_cart_products.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse getOrderCartProduct(HttpSession session) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse getOrderCartProduct(HttpServletRequest request) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -134,8 +163,13 @@ public class OrderController {
 
     @RequestMapping(value = "detail.do", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse detail(HttpSession session, Long orderNo) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+    public ServerResponse detail(HttpServletRequest request, Long orderNo) {
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -146,10 +180,15 @@ public class OrderController {
     @RequestMapping(value = "list.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse list(
-            HttpSession session,
+            HttpServletRequest request,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        User user = (User)session.getAttribute(Constants.CURRENT_USER);
+        String token = CookieUtil.readLoginToken(request);
+        if (StringUtil.isEmpty(token)) {
+            return ServerResponse.createByErrorMessage("user did not login");
+        }
+        String userInfoStr = RedisUtil.get(token);
+        User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
