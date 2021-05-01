@@ -6,7 +6,7 @@ import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
-import com.mmall.util.RedisUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,7 +89,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("security question answer is wrong");
         }
         String token = UUID.randomUUID().toString();
-        RedisUtil.setEx(Constants.CACHE_TOKEN_PREFIX + username, token, 60 * 60 * 12);
+        RedisShardedPoolUtil.setEx(Constants.CACHE_TOKEN_PREFIX + username, token, 60 * 60 * 12);
         return ServerResponse.createBySuccess(token);
     }
 
@@ -101,7 +101,7 @@ public class UserServiceImpl implements IUserService {
         if (response.isSuccess()) {
             return ServerResponse.createByErrorMessage("user does not exist");
         }
-        String savedToken = RedisUtil.get(Constants.CACHE_TOKEN_PREFIX + username);
+        String savedToken = RedisShardedPoolUtil.get(Constants.CACHE_TOKEN_PREFIX + username);
         if (org.apache.commons.lang3.StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorMessage("input token is blank");
         }

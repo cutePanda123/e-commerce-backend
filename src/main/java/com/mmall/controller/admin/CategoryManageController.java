@@ -9,7 +9,7 @@ import com.mmall.service.ICategoryService;
 import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +39,7 @@ public class CategoryManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
@@ -63,7 +63,7 @@ public class CategoryManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
@@ -87,7 +87,7 @@ public class CategoryManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(
@@ -111,7 +111,7 @@ public class CategoryManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(

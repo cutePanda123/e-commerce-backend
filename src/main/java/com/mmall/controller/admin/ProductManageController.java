@@ -13,7 +13,7 @@ import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.PropertiesUtil;
-import com.mmall.util.RedisUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import com.mmall.vo.ProductDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
@@ -50,7 +50,7 @@ public class ProductManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
@@ -68,7 +68,7 @@ public class ProductManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
@@ -86,7 +86,7 @@ public class ProductManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
@@ -107,7 +107,7 @@ public class ProductManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
@@ -130,7 +130,7 @@ public class ProductManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
@@ -151,7 +151,7 @@ public class ProductManageController {
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "user does not login");
@@ -184,7 +184,7 @@ public class ProductManageController {
             resultMap.put("msg", "user does not login");
             return resultMap;
         }
-        String userInfoStr = RedisUtil.get(token);
+        String userInfoStr = RedisShardedPoolUtil.get(token);
         User user = JsonUtil.str2obj(userInfoStr, User.class);
         if (user == null) {
             resultMap.put("success", false);
