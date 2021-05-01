@@ -4,14 +4,14 @@
     {
       "entity": {
         "type": "Project",
-        "id": "b548a1d5-538a-4abb-a1fa-e0d143c5bfc7",
+        "id": "384c68f2-a079-4a6d-b7f0-f2045d936873",
         "name": "mmall"
       },
       "children": [
         {
           "entity": {
             "type": "Service",
-            "id": "241b023c-981a-4b61-94a4-db2763df64ca",
+            "id": "ee1aabf1-e752-460d-8bc7-c9f5dee7d9de",
             "name": "cart"
           },
           "children": [
@@ -56,7 +56,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/add.do"
                 },
-                "id": "4721b2f6-cd33-4936-9ab8-8f61f53927f3",
+                "id": "715f1a43-15f0-4740-818c-5e6b29eda867",
                 "name": "add item to cart",
                 "headers": [
                   {
@@ -100,7 +100,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/delete.do"
                 },
-                "id": "d8c6d8d5-3330-49ba-9fb0-a3c2ff811286",
+                "id": "5f5e9737-d912-4f32-a597-91e3469449b0",
                 "name": "delete one",
                 "headers": [
                   {
@@ -138,7 +138,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/get_cart_items_quantity.do"
                 },
-                "id": "0e9fc6a5-e255-493c-86c0-e5d1a303d29f",
+                "id": "f836d896-8c1c-413d-8431-b9e9e51e62b7",
                 "name": "get total items quantity",
                 "headers": []
               }
@@ -170,7 +170,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/list.do"
                 },
-                "id": "8a8fdcf6-79e4-433c-81a1-3d954cc857cf",
+                "id": "87a9ce11-025f-4531-882c-dded1ed4e9b7",
                 "name": "list cart items",
                 "headers": []
               }
@@ -203,7 +203,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/select_all.do"
                 },
-                "id": "95c1efd4-e282-4964-ab8a-b2da06530f17",
+                "id": "3d75ca7c-0033-4d08-9534-4ad72fd415d4",
                 "name": "select all",
                 "headers": [
                   {
@@ -249,7 +249,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/select.do"
                 },
-                "id": "4e668d68-e022-4d76-afe6-2395aa4cff33",
+                "id": "2cd3e6d2-06fb-4483-8d2d-ef7759448f85",
                 "name": "select one",
                 "headers": [
                   {
@@ -288,7 +288,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/unselect_all.do"
                 },
-                "id": "166b0dd9-30f8-47a5-9844-d1d5973264c2",
+                "id": "49d31044-2b90-4b7a-8144-c148ffea53a8",
                 "name": "unselect all",
                 "headers": [
                   {
@@ -334,7 +334,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/unselect.do"
                 },
-                "id": "73677500-f0d4-45b1-a1da-08c0b54769f2",
+                "id": "fc873f43-d51d-4d6f-8227-1eb920b54d7e",
                 "name": "unselect one",
                 "headers": [
                   {
@@ -386,7 +386,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/cart/update.do"
                 },
-                "id": "a43f1a7c-48ab-4537-99c3-8c3620bed9f3",
+                "id": "83a7d655-8b2d-42d1-9a85-a41eac2499a8",
                 "name": "update one",
                 "headers": [
                   {
@@ -402,7 +402,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "fcfab2e6-a0e7-4cc0-9a0c-47f335332bef",
+            "id": "7686ef8b-b5e0-4f32-b202-f47de700e34a",
             "name": "category"
           },
           "children": [
@@ -447,7 +447,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/add_category.do"
                 },
-                "id": "ece9cc35-7b2d-4f94-8157-4d39dcac78a0",
+                "id": "59841c5f-9f0f-41eb-a387-4d1f8712720a",
                 "name": "add category",
                 "headers": [
                   {
@@ -491,7 +491,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/get_subcategory.do"
                 },
-                "id": "e9458b44-f4f5-49c3-8f5c-cab357e4dc56",
+                "id": "71d8f75c-818b-43dc-b76d-8f47b1dc3240",
                 "name": "get category",
                 "headers": []
               }
@@ -529,7 +529,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/get_subcategory_recursion.do"
                 },
-                "id": "db6678c2-25ed-4611-9399-9a3bf7e6a761",
+                "id": "71c791c5-3a1e-4368-8aca-a899396ab675",
                 "name": "get category recursion",
                 "headers": []
               }
@@ -575,7 +575,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/category/update_category_name.do"
                 },
-                "id": "6a0550fb-2585-4252-b1ee-bb579e8db241",
+                "id": "ca432e1c-5b2a-4e20-8fc4-bae2801d4dd9",
                 "name": "update category name",
                 "headers": [
                   {
@@ -591,7 +591,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "0470bcbf-77c8-4d3f-bb99-815cbb07b7e1",
+            "id": "f42b6804-c14c-4b21-84de-b9e0cc90b7e4",
             "name": "health check"
           },
           "children": [
@@ -622,7 +622,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/healthcheck/health_check.do"
                 },
-                "id": "2061e56a-1bbc-4d90-8c5a-3d0af8b76fd6",
+                "id": "d0242362-9fa3-4ce2-ad92-d47bc8558fdc",
                 "name": "health check",
                 "headers": []
               }
@@ -632,7 +632,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "8ba1b3ec-1222-4bd0-b47d-d20b08eac65d",
+            "id": "43a3703d-bb17-4f1a-b73e-9bd6aaaa451d",
             "name": "order"
           },
           "children": [
@@ -670,7 +670,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/order/cancel.do"
                 },
-                "id": "20a92e89-a673-4875-a045-632ccf4c9d7a",
+                "id": "095d4e48-d8c3-43f1-ad83-82425c032363",
                 "name": "cancel order",
                 "headers": [
                   {
@@ -716,7 +716,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/order/create.do"
                 },
-                "id": "2ddc8f41-ee72-4fb8-bc45-e4e92a4b391d",
+                "id": "1aea5cd3-3ed8-47d4-accd-5fea75f40c7b",
                 "name": "create order",
                 "headers": [
                   {
@@ -760,7 +760,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/order/detail.do"
                 },
-                "id": "fb5c4a8f-130f-4b38-a430-67c09998f6c7",
+                "id": "f4464f7d-b5ef-43fc-830d-c3d6665293d8",
                 "name": "get order detail",
                 "headers": []
               }
@@ -798,7 +798,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/order/query_order_payment_status.do"
                 },
-                "id": "6aedb879-0583-456a-9c24-57fdbffe63c7",
+                "id": "bb4e517e-cbca-49c8-bfe6-ca2456819bc0",
                 "name": "get order payment status",
                 "headers": []
               }
@@ -830,7 +830,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/order/get_order_cart_products.do"
                 },
-                "id": "3d632e86-c339-43ed-936e-aed09e108914",
+                "id": "65d4e927-c3e4-4371-9e8c-4b2005808c0b",
                 "name": "get order product details",
                 "headers": []
               }
@@ -862,7 +862,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/order/list.do"
                 },
-                "id": "8ee51c93-5e63-482d-b301-79326bc3278d",
+                "id": "761f94db-068c-43f3-96a8-eeb71e4eb791",
                 "name": "list orders",
                 "headers": []
               }
@@ -872,7 +872,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "e2c19397-3912-4360-ab38-3dc875dffe7b",
+            "id": "e825fc12-35f2-4a02-9e15-e674c911eb1f",
             "name": "product"
           },
           "children": [
@@ -953,7 +953,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/add.do"
                 },
-                "id": "534aedf4-0da3-4517-a8fe-f097734ea827",
+                "id": "979062d6-23e3-4a51-b095-53306058ce9c",
                 "name": "add-or-update",
                 "headers": [
                   {
@@ -997,7 +997,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/detail.do"
                 },
-                "id": "895c290c-b293-44f0-b3b3-e621e7b7d2e0",
+                "id": "e2e005ed-1e0b-4927-bacd-876e148c2a9b",
                 "name": "admin get ((will get all products including on-sale, sold-out, deleted)",
                 "headers": []
               }
@@ -1042,7 +1042,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/list.do"
                 },
-                "id": "3ea6822e-769f-47dc-85e2-4d70859477e6",
+                "id": "f8980ac7-e1ee-44cb-b4d5-753bb3090ff6",
                 "name": "admin list",
                 "headers": []
               }
@@ -1080,7 +1080,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/product/detail.do"
                 },
-                "id": "6fec8c30-3d42-476d-b6bc-a1e4537f185a",
+                "id": "7af172e2-239c-4cdd-b477-252d9c0e50fe",
                 "name": "get(will only get on sale products)",
                 "headers": []
               }
@@ -1122,7 +1122,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/product/list.do"
                 },
-                "id": "aba8b60f-8f2e-4a4c-8d2d-880153be852e",
+                "id": "f36a89de-b1e9-44f4-94f6-00b4f9032bde",
                 "name": "list",
                 "headers": []
               }
@@ -1165,7 +1165,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/search.do"
                 },
-                "id": "fee9c44b-0ffa-424b-97f4-1d54e741fd7c",
+                "id": "885fa802-da32-457d-a9ba-833e58735394",
                 "name": "search",
                 "headers": []
               }
@@ -1211,7 +1211,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/manage/product/update_sale_status.do"
                 },
-                "id": "b1574bad-c4d3-43c4-9321-0de50be458fe",
+                "id": "6cde7447-1c9d-494c-8e45-74554abad47d",
                 "name": "update sale status",
                 "headers": [
                   {
@@ -1227,7 +1227,7 @@
         {
           "entity": {
             "type": "Service",
-            "id": "efe92600-2deb-4c60-9410-95fb5bdb3a0e",
+            "id": "b8b05915-5161-494f-9fa2-d86ab33e94b6",
             "name": "shipping"
           },
           "children": [
@@ -1302,7 +1302,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/shipping/add.do"
                 },
-                "id": "c8308fa5-6877-4e33-b080-b09342723c8d",
+                "id": "c2fbdf08-89bc-4e42-b839-89309778bfd2",
                 "name": "add",
                 "headers": [
                   {
@@ -1346,7 +1346,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/shipping/delete.do"
                 },
-                "id": "763e96e7-c18f-476c-bc10-bad91726d625",
+                "id": "6cbeec29-c8f9-4253-ab9b-814553196d6e",
                 "name": "delete",
                 "headers": []
               }
@@ -1384,7 +1384,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/shipping/list.do"
                 },
-                "id": "125ce352-f66d-43cd-bfd1-47fecc6be456",
+                "id": "0765c842-6c90-459f-a827-987c35c26962",
                 "name": "get",
                 "headers": []
               }
@@ -1416,7 +1416,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/shipping/list.do"
                 },
-                "id": "c3bb4752-38d9-48ac-bd3a-3cd6a61b3f92",
+                "id": "de28bb33-d4b4-45b5-a66f-4bc31fa39451",
                 "name": "list",
                 "headers": []
               }
@@ -1462,7 +1462,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/shipping/update.do"
                 },
-                "id": "c08dee11-d522-426c-9e5f-b235a90a0a6c",
+                "id": "e69e0dee-1409-494a-803c-c58b9edbd0a5",
                 "name": "update",
                 "headers": [
                   {
@@ -1478,7 +1478,7 @@
         {
           "entity": {
             "type": "Scenario",
-            "id": "0734fc0c-e7fd-4ae6-9595-5e0864eb6624",
+            "id": "5258c0d5-6ba7-45b1-b9cc-004b9c5c9fe1",
             "name": "user"
           },
           "children": [
@@ -1499,13 +1499,13 @@
                         "enabled": true,
                         "type": "Text",
                         "name": "username",
-                        "value": "admin1"
+                        "value": "admin2"
                       },
                       {
                         "enabled": true,
                         "type": "Text",
                         "name": "password",
-                        "value": "admin1"
+                        "value": "admin2"
                       }
                     ]
                   },
@@ -1523,7 +1523,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/login.do"
                 },
-                "id": "87568014-864d-49d3-a2e3-b86115fc21f7",
+                "id": "8b9a336d-623e-4544-93a4-6b1ac10d9150",
                 "name": "login.do",
                 "headers": [
                   {
@@ -1559,9 +1559,9 @@
                     "version": "V11"
                   },
                   "host": "localhost:8080",
-                  "path": "/mmall/user/healthcheck.do"
+                  "path": "/mmall/manage/health/check.do"
                 },
-                "id": "8cad0126-7787-4ced-8432-7bd1a7a2a658",
+                "id": "c7c6a859-23bc-430d-b715-21799fbc8c7a",
                 "name": "health check",
                 "headers": []
               }
@@ -1583,19 +1583,19 @@
                         "enabled": true,
                         "type": "Text",
                         "name": "username",
-                        "value": "admin"
+                        "value": "admin2"
                       },
                       {
                         "enabled": true,
                         "type": "Text",
                         "name": "password",
-                        "value": "admin"
+                        "value": "admin2"
                       },
                       {
                         "enabled": true,
                         "type": "Text",
                         "name": "email",
-                        "value": "abc@gmail.com"
+                        "value": "abc2@gmail.com"
                       },
                       {
                         "enabled": true,
@@ -1631,7 +1631,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/register.do"
                 },
-                "id": "d1d1ecd2-fb19-4ea1-91ca-19bf92323f55",
+                "id": "1dca0f39-1246-44ba-a576-60b5d2cebf2a",
                 "name": "register",
                 "headers": [
                   {
@@ -1680,7 +1680,7 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/is_unregistered.do"
                 },
-                "id": "7016d4b4-6933-48af-b363-e5b76c6ec1cd",
+                "id": "ea17ee3d-0e2a-4c3f-aa10-9a25115b60bc",
                 "name": "check user identity availability",
                 "headers": []
               }
@@ -1712,8 +1712,94 @@
                   "host": "localhost:8080",
                   "path": "/mmall/user/get_user_info.do"
                 },
-                "id": "9e8920a8-9fe3-464c-9912-bc10d890f490",
+                "id": "0fd51f40-0e09-45c2-87a3-dae27bd70255",
                 "name": "get user information",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "username",
+                        "value": "admin2"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/user/get_security_question.do"
+                },
+                "id": "c3f4c116-4f9b-4188-86a9-cc1686ef0831",
+                "name": "get question",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "name": "username",
+                        "value": "admin2"
+                      },
+                      {
+                        "enabled": true,
+                        "name": "answer",
+                        "value": "my pet"
+                      },
+                      {
+                        "enabled": true,
+                        "name": "question",
+                        "value": "what is your pet's name"
+                      }
+                    ]
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/user/check_security_answer.do"
+                },
+                "id": "318e74f2-7aea-4fe5-b05e-bb91a5a3b2e6",
+                "name": "check security question answer",
                 "headers": []
               }
             }
@@ -1724,11 +1810,11 @@
   ],
   "environments": [
     {
-      "id": "f72d0c1f-04fd-48d5-97e8-d6839bd314d1",
+      "id": "fb267fed-6f8c-41f3-b008-d8c4ee1bff89",
       "name": "dev",
       "variables": {
-        "924b6f10-fe32-431f-9d6a-66463ca76921": {
-          "createdAt": "2021-03-14T13:00:58.378-07:00",
+        "862d7065-37bf-4ba7-9924-c2dd6126a0ec": {
+          "createdAt": "2021-04-25T21:22:54.349-07:00",
           "name": "",
           "value": "",
           "enabled": true,
