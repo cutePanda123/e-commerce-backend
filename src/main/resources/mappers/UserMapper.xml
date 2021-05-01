@@ -183,8 +183,8 @@
     count(1)
     from mmall_user
     where username = #{username}
-    and question = #{question}
-    and answer = #{answer}
+    and security_question = #{question}
+    and security_answer = #{answer}
   </select>
 
   <update id="updatePasswordByUsername" parameterType="map">
