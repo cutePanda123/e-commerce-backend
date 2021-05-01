@@ -2,11 +2,11 @@ package com.mmall.service.impl;
 
 import com.mmall.common.Constants;
 import com.mmall.common.ServerResponse;
-import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
+import com.mmall.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,12 +84,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     public ServerResponse checkSecurityQuestionAnswer(String username, String question, String answer) {
-        int resoutCount = userMapper.checkAnswer(username, question, answer);
-        if (resoutCount == 0) {
-            return ServerResponse.createByErrorMessage("answer is wrong");
+        int resourceCount = userMapper.checkAnswer(username, question, answer);
+        if (resourceCount == 0) {
+            return ServerResponse.createByErrorMessage("security question answer is wrong");
         }
         String token = UUID.randomUUID().toString();
-        TokenCache.setKey(Constants.CACHE_TOKEN_PREFIX + username, token);
+        RedisUtil.setEx(Constants.CACHE_TOKEN_PREFIX + username, token, 60 * 60 * 12);
         return ServerResponse.createBySuccess(token);
     }
 
@@ -101,7 +101,7 @@ public class UserServiceImpl implements IUserService {
         if (response.isSuccess()) {
             return ServerResponse.createByErrorMessage("user does not exist");
         }
-        String savedToken = TokenCache.getKey(Constants.CACHE_TOKEN_PREFIX + username);
+        String savedToken = RedisUtil.get(Constants.CACHE_TOKEN_PREFIX + username);
         if (org.apache.commons.lang3.StringUtils.isBlank(token)) {
             return ServerResponse.createByErrorMessage("input token is blank");
         }
