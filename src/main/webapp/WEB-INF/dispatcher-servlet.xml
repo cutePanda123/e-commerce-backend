@@ -38,4 +38,11 @@
         <property name="maxInMemorySize" value="4096" />
         <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
+    
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/manage/**/"/>
+            <bean class="com.mmall.common.interceptors.AuthorityInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>v
 </beans>
