@@ -41,8 +41,8 @@
     
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/manage/**/"/>
+            <mvc:mapping path="/manage/**"/>
             <bean class="com.mmall.common.interceptors.AuthorityInterceptor" />
         </mvc:interceptor>
-    </mvc:interceptors>v
+    </mvc:interceptors>
 </beans>
