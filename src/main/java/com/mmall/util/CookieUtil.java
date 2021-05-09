@@ -16,7 +16,7 @@ public class CookieUtil {
     public static void writeLoginToken(HttpServletResponse response, String token) {
         Cookie cookie = new Cookie(COOKIE_NAME, token);
         cookie.setDomain(COOKIE_DOMAIN);
-        cookie.setPath(";Path=/;HttpOnly;");
+        cookie.setPath("/");
 
         // without max age, cookie will stay in memory not in disk
         cookie.setMaxAge(60 * 60 * 24 * 365);
