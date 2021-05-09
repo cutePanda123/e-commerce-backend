@@ -46,6 +46,7 @@ public class ProductManageController {
     @RequestMapping(value = "add.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse addProduct(HttpServletRequest request, Product product) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -57,13 +58,14 @@ public class ProductManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
-        }
+        }*/
         return iProductService.addOrUpdateProduct(product);
     }
 
     @RequestMapping(value = "update_sale_status.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse updateSaleStatus(HttpServletRequest request, Integer productId, Integer status) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -75,13 +77,14 @@ public class ProductManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
-        }
+        }*/
         return iProductService.updateSaleStatus(productId, status);
     }
 
     @RequestMapping(value = "detail.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse manageProductDetail(HttpServletRequest request, Integer productId) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -93,7 +96,7 @@ public class ProductManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
-        }
+        }*/
         return iProductService.getProductDetail(productId, true);
     }
 
@@ -102,7 +105,9 @@ public class ProductManageController {
     public ServerResponse listProducts(
             HttpServletRequest request,
             @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
+    ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -114,7 +119,7 @@ public class ProductManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
-        }
+        }*/
         return iProductService.listProducts(pageNum, pageSize);
     }
 
@@ -125,7 +130,9 @@ public class ProductManageController {
             Integer productId,
             String productName,
             @RequestParam(value="pageNum", defaultValue = "1") int pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize
+    ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -137,7 +144,7 @@ public class ProductManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
-        }
+        }*/
         return iProductService.searchProducts(productName, productId, pageNum, pageSize);
     }
 
@@ -146,7 +153,9 @@ public class ProductManageController {
     public ServerResponse upload(
             HttpSession session,
             @RequestParam(value = "uploadFile", required = false) MultipartFile file,
-            HttpServletRequest request) {
+            HttpServletRequest request
+    ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -158,7 +167,7 @@ public class ProductManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin only: permission denied.");
-        }
+        }*/
 
         String path = request.getSession().getServletContext().getRealPath(Constants.IMAGE_UPLOAD_DIR);
         String targetFileName = iFileService.upload(file, path);
@@ -178,6 +187,7 @@ public class ProductManageController {
             HttpServletResponse response
     ) {
         Map resultMap = Maps.newHashMap();
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             resultMap.put("success", false);
@@ -195,7 +205,7 @@ public class ProductManageController {
             resultMap.put("success", false);
             resultMap.put("msg", "admin only: permission denied");
             return resultMap;
-        }
+        } */
         // return value will follow simditor's one
         String path = request.getSession().getServletContext().getRealPath(Constants.IMAGE_UPLOAD_DIR);
         String targetFileName = iFileService.upload(file, path);

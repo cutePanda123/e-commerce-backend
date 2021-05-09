@@ -37,7 +37,9 @@ public class OrderManageController {
     public ServerResponse<PageInfo> listOrder(
             HttpServletRequest request,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -52,13 +54,14 @@ public class OrderManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
-        }
+        } */
         return iOrderService.adminGetOrderList(pageNum, pageSize);
     }
 
     @RequestMapping(value = "detail.do", method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<OrderVo> getOrderDetail(HttpServletRequest request, Long orderNo) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -73,7 +76,7 @@ public class OrderManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
-        }
+        }*/
         return iOrderService.adminGetOrderDetail(orderNo);
     }
 
@@ -83,7 +86,9 @@ public class OrderManageController {
             HttpServletRequest request,
             Long orderNo,
             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -98,13 +103,14 @@ public class OrderManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
-        }
+        } */
         return iOrderService.adminSearchOrders(orderNo, pageNum, pageSize);
     }
 
     @RequestMapping(value = "ship_products.do", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> shipProducts(HttpServletRequest request, Long orderNo) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -119,7 +125,7 @@ public class OrderManageController {
         }
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
-        }
+        }*/
         return iOrderService.adminShipProducts(orderNo);
     }
 }

@@ -58,7 +58,9 @@ public class CategoryManageController {
     public ServerResponse updateCategoryName(
             HttpServletRequest request,
             String categoryName,
-            Integer categoryId) {
+            Integer categoryId
+    ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -74,6 +76,7 @@ public class CategoryManageController {
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
         }
+         */
         return iCategoryService.updateCategoryName(categoryName, categoryId);
     }
 
@@ -83,6 +86,7 @@ public class CategoryManageController {
             HttpServletRequest request,
             @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId
     ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -98,6 +102,7 @@ public class CategoryManageController {
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
         }
+        */
         return iCategoryService.getSubCategoryWithoutRecursion(categoryId);
     }
 
@@ -107,6 +112,7 @@ public class CategoryManageController {
             HttpServletRequest request,
             @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId
     ) {
+        /* handled by authority interceptor
         String token = CookieUtil.readLoginToken(request);
         if (StringUtil.isEmpty(token)) {
             return ServerResponse.createByErrorMessage("user did not login");
@@ -122,6 +128,7 @@ public class CategoryManageController {
         if (!iUserService.isAdminRole(user).isSuccess()) {
             return ServerResponse.createByErrorMessage("admin user only: permission denied");
         }
+         */
         return iCategoryService.getSubCategoryWithRecursion(categoryId);
     }
 

@@ -50,6 +50,12 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             String userInfoStr = RedisShardedPoolUtil.get(token);
             user = JsonUtil.str2obj(userInfoStr, User.class);
         }
+        log.info(
+            "authority interceptor catches incoming request, class name: {}, method name:{}, param: {}",
+            className,
+            methodName,
+            paraMap
+        );
         if (user == null || (user.getRole().intValue() != Constants.Role.ROLE_ADMIN)) {
             httpServletResponse.reset(); // without reset, getWriter() has already be set exception will be thrown
             httpServletResponse.setCharacterEncoding("UTF-8");
