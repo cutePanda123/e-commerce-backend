@@ -42,6 +42,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/manage/**"/>
+            <mvc:exclude-mapping path="/manage/user/login.do"/>
             <bean class="com.mmall.common.interceptors.AuthorityInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
