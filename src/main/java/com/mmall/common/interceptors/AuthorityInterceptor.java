@@ -1,6 +1,7 @@
 package com.mmall.common.interceptors;
 
 import com.github.pagehelper.StringUtil;
+import com.google.common.collect.Maps;
 import com.mmall.common.Constants;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
@@ -56,9 +57,23 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
             PrintWriter out = httpServletResponse.getWriter();
             if (user == null) {
-                out.print(JsonUtil.obj2str(ServerResponse.createByErrorMessage("authority interceptor: no login user")));
+                if (StringUtils.equals(className, "ProductManageController") && StringUtils.equals(methodName, "richtextImageUpload")) {
+                    Map resultMap = Maps.newHashMap();
+                    resultMap.put("success", false);
+                    resultMap.put("msg", "user does not login");
+                    out.print(JsonUtil.obj2str(resultMap));
+                } else {
+                    out.print(JsonUtil.obj2str(ServerResponse.createByErrorMessage("authority interceptor: no login user")));
+                }
             } else {
-                out.print(JsonUtil.obj2str(ServerResponse.createByErrorMessage("authority interceptor: no admin user")));
+                if (StringUtils.equals(className, "ProductManageController") && StringUtils.equals(methodName, "richtextImageUpload")) {
+                    Map resultMap = Maps.newHashMap();
+                    resultMap.put("success", false);
+                    resultMap.put("msg", "admin only: permission denied");
+                    out.print(JsonUtil.obj2str(resultMap));
+                } else {
+                    out.print(JsonUtil.obj2str(ServerResponse.createByErrorMessage("authority interceptor: no admin user")));
+                }
             }
             out.flush();
             out.close();
