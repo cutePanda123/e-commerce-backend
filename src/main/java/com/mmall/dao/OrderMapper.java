@@ -25,4 +25,11 @@ public interface OrderMapper {
     List<Order> selectByUserId(Integer userId);
 
     List<Order> selectAllOrders();
+
+    List<Order> selectByStatusAndCreateTime(
+            @Param("status") Integer status,
+            @Param("date") String date
+    );
+
+    int closeOrderById(Integer id);
 }

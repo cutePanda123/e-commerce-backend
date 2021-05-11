@@ -31,6 +31,7 @@ import com.mmall.vo.ShippingVo;
 import net.sf.jsqlparser.util.deparser.UpdateDeParser;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -488,6 +489,36 @@ public class OrderServiceImpl implements IOrderService {
         return ServerResponse.createByError();
     }
 
+    @Override
+    public void closeOrders(int maxTimeout) {
+        Date dateThreshold = DateUtils.addHours(new Date(), -maxTimeout);
+        List<Order> expiredOrders = orderMapper.selectByStatusAndCreateTime(
+                Constants.OrderStatusEnum.PENDING_PAYMENT.getCode(),
+                DateTimeUtil.dateToStr(dateThreshold)
+        );
+
+        for (Order expiredOrder : expiredOrders) {
+            List<OrderItem> orderItems = orderItemMapper.selectByOrderNo((long)expiredOrder.getOrderNo());
+            for (OrderItem orderItem : orderItems) {
+                // the inner sql has "for update", so here we should query by primary key
+                // and the db engine should be innodb
+                // otherwise, it will lock entire table.
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+
+                if (stock == null) {
+                    // the product was deleted
+                    continue;
+                }
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock + orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+            orderMapper.closeOrderById(expiredOrder.getId());
+            logger.info("close order with NO:", expiredOrder.getOrderNo());
+        }
+    }
+    
     private List<OrderVo> buildOrderVoList(List<Order> orderList, Integer userId) {
         List<OrderVo> orderVoList = Lists.newArrayList();
         for (Order order : orderList) {

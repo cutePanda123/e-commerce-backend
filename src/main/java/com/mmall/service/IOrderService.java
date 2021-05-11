@@ -31,4 +31,6 @@ public interface IOrderService {
     public ServerResponse<PageInfo> adminSearchOrders(Long orderNo, Integer pageNum, Integer pageSize);
 
     public ServerResponse<String> adminShipProducts(Long orderNo);
+
+    public void closeOrders(int maxTimeout);
 }
