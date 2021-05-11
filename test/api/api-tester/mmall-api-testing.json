@@ -4,6 +4,7 @@
     {
       "entity": {
         "type": "Project",
+        "description": "",
         "id": "384c68f2-a079-4a6d-b7f0-f2045d936873",
         "name": "mmall"
       },
@@ -1145,6 +1146,38 @@
                 "uri": {
                   "query": {
                     "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/product/2"
+                },
+                "id": "ff7913cb-0b38-44a8-93fc-69d9107fbd90",
+                "name": "restful get(will only get on sale products)",
+                "headers": []
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+                  "name": "GET"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": []
+                  },
+                  "bodyType": "Text"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
                     "items": [
                       {
                         "enabled": true,
@@ -1520,11 +1553,11 @@
                     "name": "http",
                     "version": "V11"
                   },
-                  "host": "localhost:8080",
+                  "host": "www.panda.com:8080",
                   "path": "/mmall/user/login.do"
                 },
                 "id": "8b9a336d-623e-4544-93a4-6b1ac10d9150",
-                "name": "login.do",
+                "name": "login user",
                 "headers": [
                   {
                     "enabled": true,
@@ -1802,25 +1835,114 @@
                 "name": "check security question answer",
                 "headers": []
               }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "username",
+                        "value": "admin2"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "password",
+                        "value": "admin2"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "localhost:8080",
+                  "path": "/mmall/user/springsession/login.do"
+                },
+                "id": "650ee4c3-f630-4513-b4f7-ce0b80eb0bfa",
+                "name": "spring-session login",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
+            },
+            {
+              "entity": {
+                "type": "Request",
+                "method": {
+                  "requestBody": true,
+                  "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+                  "name": "POST"
+                },
+                "body": {
+                  "formBody": {
+                    "overrideContentType": true,
+                    "encoding": "application/x-www-form-urlencoded",
+                    "items": [
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "username",
+                        "value": "admin2"
+                      },
+                      {
+                        "enabled": true,
+                        "type": "Text",
+                        "name": "password",
+                        "value": "admin2"
+                      }
+                    ]
+                  },
+                  "bodyType": "Form"
+                },
+                "uri": {
+                  "query": {
+                    "delimiter": "&",
+                    "items": []
+                  },
+                  "scheme": {
+                    "name": "http",
+                    "version": "V11"
+                  },
+                  "host": "www.panda.com:8080",
+                  "path": "/mmall/manage/user/login.do"
+                },
+                "id": "a5b761cb-f43a-4649-ba96-8e114fcb6c4c",
+                "name": "login-admin",
+                "headers": [
+                  {
+                    "enabled": true,
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  }
+                ]
+              }
             }
           ]
         }
       ]
-    }
-  ],
-  "environments": [
-    {
-      "id": "fb267fed-6f8c-41f3-b008-d8c4ee1bff89",
-      "name": "dev",
-      "variables": {
-        "862d7065-37bf-4ba7-9924-c2dd6126a0ec": {
-          "createdAt": "2021-04-25T21:22:54.349-07:00",
-          "name": "",
-          "value": "",
-          "enabled": true,
-          "private": false
-        }
-      }
     }
   ]
 }
