@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
+
 @Component
 @Slf4j
 public class CloseOrderTask {
@@ -39,6 +41,11 @@ public class CloseOrderTask {
         }
         log.info("close order cronjob end");
     }
+
+//    @PreDestroy
+//    public void releaseV2Lock() {
+//        RedisShardedPoolUtil.delete(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+//    }
 
     private void closeOrder(String lockName) {
         // set lock expire time 50 seconds to avoid dead lock
