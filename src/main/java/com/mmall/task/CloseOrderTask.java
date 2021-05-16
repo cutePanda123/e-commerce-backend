@@ -1,10 +1,12 @@
 package com.mmall.task;
 
 import com.mmall.common.Constants;
+import com.mmall.common.RedisShardedPool;
 import com.mmall.service.IOrderService;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.util.RedisShardedPoolUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,8 +32,8 @@ public class CloseOrderTask {
         log.info("close order cronjob start");
         long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout", "5000"));
         Long setnxResult = RedisShardedPoolUtil.setnx(
-            Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
-            String.valueOf(System.currentTimeMillis()) + lockTimeout
+                Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
+                String.valueOf(System.currentTimeMillis()) + lockTimeout
         );
         if (setnxResult != null && setnxResult.intValue() == 1) {
             // acquired lock
@@ -47,9 +49,45 @@ public class CloseOrderTask {
 //        RedisShardedPoolUtil.delete(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
 //    }
 
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void closeOrderTaskV3() {
+        log.info("close order cronjob start");
+        long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout", "5000"));
+        Long setnxResult = RedisShardedPoolUtil.setnx(
+                Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
+                String.valueOf(System.currentTimeMillis()) + lockTimeout
+        );
+        if (setnxResult != null && setnxResult.intValue() == 1) {
+            // acquired lock
+            closeOrder(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+        } else {
+            log.info("did not get lock: {}", Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+            String lockTimestamp = RedisShardedPoolUtil.get(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+            if (lockTimestamp != null && System.currentTimeMillis() > Long.parseLong(lockTimestamp)) {
+                String getSetResult = RedisShardedPoolUtil.getSet(
+                        Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
+                        String.valueOf(System.currentTimeMillis()) + lockTimeout
+                );
+
+                if (getSetResult == null || StringUtils.equals(lockTimestamp, getSetResult)) {
+                    // acquired the lock
+                    closeOrder(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+                } else {
+                    log.info("did not get lock: {}", Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+                }
+            } else {
+                log.info("did not get lock: {}", Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+            }
+        }
+        log.info("close order cronjob end");
+    }
+
     private void closeOrder(String lockName) {
         // set lock expire time 50 seconds to avoid dead lock
-        RedisShardedPoolUtil.expire(lockName, 50);
+        RedisShardedPoolUtil.expire(
+            lockName,
+            Integer.parseInt(PropertiesUtil.getProperty("lock.timeout", "5000")) / 1000
+        );
         log.info(
             "acquired lock: {}, thread name: {}",
             Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,
