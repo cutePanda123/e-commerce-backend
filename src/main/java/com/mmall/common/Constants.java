@@ -104,6 +104,10 @@ public class Constants {
             throw new RuntimeException("cannot find enum");
         }
     }
+
+    public interface REDIS_LOCK {
+        String CLOSE_ORDER_TASK_LOCK = "CLOSE_ORDER_TASK_LOCK";
+    }
 }
 
 
