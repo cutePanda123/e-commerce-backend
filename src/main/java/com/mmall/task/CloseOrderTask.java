@@ -2,22 +2,29 @@ package com.mmall.task;
 
 import com.mmall.common.Constants;
 import com.mmall.common.RedisShardedPool;
+import com.mmall.common.RedissonManager;
 import com.mmall.service.IOrderService;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.util.RedisShardedPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
 public class CloseOrderTask {
     @Autowired
     IOrderService iOrderService;
+
+    @Autowired
+    RedissonManager redissonManager;
 
     //@Scheduled(cron = "0 */1 * * * ?")
     public void closeOrderTaskV1() {
@@ -80,6 +87,31 @@ public class CloseOrderTask {
             }
         }
         log.info("close order cronjob end");
+    }
+
+
+    //@Scheduled(cron = "0 */1 * * * ?")
+    public void closeOrderTaskV4() {
+        RLock lock = redissonManager.getRedisson().getLock(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+        boolean acquiredLock = false;
+        try {
+            if (acquiredLock = lock.tryLock(2, 5, TimeUnit.SECONDS)) {
+                log.info("Redisson lock acquired: {}, ThreadName: {}", Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+                int timeout = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour", "2"));
+                iOrderService.closeOrders(timeout);
+            } else {
+                log.info("Redisson lock not acquired: {}, ThreadName: {}", Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+            }
+        } catch (InterruptedException e) {
+            log.error("Redisson lock acquired failed: ", e);
+            e.printStackTrace();
+        } finally {
+            if (!acquiredLock) {
+                return;
+            }
+            lock.unlock();
+            log.info("Redisson lock released");
+        }
     }
 
     private void closeOrder(String lockName) {
