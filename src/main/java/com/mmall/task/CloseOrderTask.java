@@ -95,7 +95,7 @@ public class CloseOrderTask {
         RLock lock = redissonManager.getRedisson().getLock(Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
         boolean acquiredLock = false;
         try {
-            if (acquiredLock = lock.tryLock(2, 5, TimeUnit.SECONDS)) {
+            if (acquiredLock = lock.tryLock(0, 50, TimeUnit.SECONDS)) {
                 log.info("Redisson lock acquired: {}, ThreadName: {}", Constants.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
                 int timeout = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour", "2"));
                 iOrderService.closeOrders(timeout);
