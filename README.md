@@ -16,16 +16,20 @@ Simple e-commerce online shop REST API backend with Spring Boot (CRUD app).
 * Spring Schedule
 * Spring Session
 * MySQL
+* vsftpd
 * Redis
 * Redisson
 * Alipay SDK
 * Tomcat
+* Nginx
 
 ## Enviroment Requirements
 * Java 8
 * Maven
 * Redis
 * MySQL
+* Nginx
+* vsftpd
 
 ## Get the code:
 -------------------
